@@ -1,5 +1,5 @@
 # BS1-Praktikum
-- Alex Strutz *@strutz*
+- Alex Strutz *@astrutz*
 - Torben Wolf *@Tobiland*
 - Marvin Klimm *@marvinworks*
 
