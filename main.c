@@ -1,36 +1,36 @@
 #include <stdio.h>
 
+struct key_value{
+    int key;
+    char* value;
+};
+
 int main() {
-    char *storeValue[10];
-    char *storeKey[10];
-    for (int i = 0; i < 10; i++){
-        //storeKey[i] = 'KEY'+i;
-        //storeValue[i] = 'VALUE'+i;
-        printf("\n Der Key ist %s", storeKey[i]);
-        printf("\n Der Value ist %s", storeValue[i]);
-    }
+    return 0;
 }
 
-int put(char *key, char *value, char *storeValue[], char *storeKey[]) {
-    for (int i = 0; i < sizeof(storeValue); i++) {
-        if (storeKey[i] == key) {
-            if (storeKey[i] == NULL) {
-                storeKey[i] = key;
+int put(int key, char *value, struct key_value kv[]) {
+    for (int i = 0; i < sizeof(kv); i++) {
+        if (kv[i].key == key) {
+            if (kv[i].key == NULL) {
+                kv[i].key = key;
+                kv[i].value = value;
             }
             else {
-                int tmp = *storeKey[i];
-                storeKey[i] = key;
+                int tmp = kv[i].key;
+                kv[i].key = key;
+                kv[i].value = value;
                 return tmp;
             }
         }
     }
 }
 
-int get(char *key, char *storeValue[], char *storeKey[]) {
-    for (int i = 0; i < sizeof(storeValue); i++) {
-        if (storeKey[i] == key) return 0;
+char* get(int key, struct key_value kv[]) {
+    for (int i = 0; i < sizeof(kv); i++) {
+        if (kv[i].key == key) return kv[i].value ;
     }
-    return -1;
+    return stderr;
 }
 
 int delete(char *key) {
