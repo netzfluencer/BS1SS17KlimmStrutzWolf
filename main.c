@@ -4,8 +4,8 @@ int main() {
     char *storeValue[10];
     char *storeKey[10];
     for (int i = 0; i < 10; i++){
-        storeKey[i] = 'KEY'+i;
-        storeValue[i] = 'VALUE'+i;
+        //storeKey[i] = 'KEY'+i;
+        //storeValue[i] = 'VALUE'+i;
         printf("\n Der Key ist %s", storeKey[i]);
         printf("\n Der Value ist %s", storeValue[i]);
     }
