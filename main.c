@@ -5,9 +5,7 @@ struct key_value{
     char* value;
 };
 
-int main() {
-    return 0;
-}
+
 
 int put(int key, char *value, struct key_value kv[]) {
     for (int i = 0; i < sizeof(kv); i++) {
@@ -24,6 +22,7 @@ int put(int key, char *value, struct key_value kv[]) {
             }
         }
     }
+    return 0;
 }
 
 char* get(int key, struct key_value kv[]) {
@@ -34,5 +33,12 @@ char* get(int key, struct key_value kv[]) {
 }
 
 int delete(char *key) {
+
+}
+
+int main() {
+    struct key_value kv[10];
+    //put(8, 'dasd', kv);
+    return 0;
 
 }
