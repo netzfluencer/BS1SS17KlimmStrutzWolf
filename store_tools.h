@@ -7,7 +7,7 @@
 
 int put(int key, char* value, struct key_value kv[]);
 char* get(int key, struct key_value kv[]);
-int delete(char *key, struct key_value kv[]);
+char* delete(int key, struct key_value kv[]);
 
 struct key_value{
     int key;

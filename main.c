@@ -11,7 +11,9 @@
 
 int main() {
     struct key_value kv[10];
-    put(8, 'dasd', kv);
+    put(8, (char*)'dasd', kv);
+    get(8, kv);
+    delete(8, kv);
 
 
 

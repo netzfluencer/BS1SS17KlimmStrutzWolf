@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include "store_tools.h"
 
-int put(int key, char *value, struct key_value kv[]) {
+int put(int key, char* value, struct key_value kv[]) {
     for (int i = 0; i < sizeof(kv); i++) {
         if (kv[i].key == key) {
             if (kv[i].key == NULL) {
@@ -20,7 +20,7 @@ int put(int key, char *value, struct key_value kv[]) {
             }
         }
     }
-    return 0;
+    return -1;
 }
 
 char* get(int key, struct key_value kv[]) {
@@ -30,8 +30,15 @@ char* get(int key, struct key_value kv[]) {
     return (char*)stderr;
 }
 
-int delete(char *key, struct key_value kv[]) {
-
+char* delete(int key, struct key_value kv[]) {
+    for (int i = 0; i < sizeof(kv); i++){
+        if (kv[i].key == key){
+            char* tmp = kv[i].value;
+            kv[i].value = NULL;
+            return tmp;
+        }
+    }
+    return (char*)stderr;
 }
 
 
