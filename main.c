@@ -5,8 +5,6 @@ struct key_value{
     char* value;
 };
 
-
-
 int put(int key, char *value, struct key_value kv[]) {
     for (int i = 0; i < sizeof(kv); i++) {
         if (kv[i].key == key) {
