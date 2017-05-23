@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 #include "store_tools.h"
-//#include "socket.h"
+#include "socket.h"
 
 
 int main() {
@@ -29,6 +29,6 @@ int main() {
 
 
 
-    //start();
+    start();
     return 0;
 }

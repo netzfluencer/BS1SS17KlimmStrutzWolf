@@ -1,10 +1,14 @@
 #include "store_tools.h"
 
-// Fragen:
+// Fragen ans Team:
 // 1. Wir koennten in Anbetracht von REST hier mit HTTP Status Codes arbeiten - EDIT: Besser nicht
 // 2. Wir sollten die Key vllt als char deklarieren
 // 3. Die Übergabe des structs macht im Moment keinen Sinn, da das struct Global ist
+// 4. Eine Init-Funktion
 
+// Fragen an Betreuer:
+// 1. Socket Server testing: wie geht das einfach & schnell?
+// 2. Aufgaben Punktesystem: bei bestehen 50 Punkte oder ist das maximal Punktzahl für die beste Lösung?
 
 int put(int key, char *value, char *resp, struct key_value kv[]){
     int emptyIndex = -1;
