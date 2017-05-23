@@ -2,11 +2,10 @@
 // Created by User on 11.05.2017.
 //
 
-#include <stdio.h>
 #include "store_tools.h"
 
 
-    int put(int key, char* value, struct key_value kv[]){
+int put(int key, char *value, struct key_value kv[]){
      for(int i = 0; i < sizeof(kv); i++){
         if(kv[i].key == key){
             int tmp = kv[i].key;
