@@ -11,7 +11,6 @@
 #include <stdio.h>
 #include "store_tools.h"
 
-int sm_key = 4325;
 
 int shmem();
 #endif //BS1SS17KLIMMSTRUTZWOLF_SHMEM_H
