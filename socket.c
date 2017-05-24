@@ -7,6 +7,8 @@ int start(){
     struct sockaddr_in server;
     struct sockaddr_in client;
     int fileDescriptor;
+    char in[2000]; // Daten vom Client an den Server
+    char out[2000]; // Daten vom Server an den Client
 
     printf("Starting cKey-Server...\n");
 
@@ -61,6 +63,14 @@ int start(){
     while(1) {
         fileDescriptor = accept(sock, (struct sockaddr *) &client, &client_len);
         printf("Connection!\n");
+        while(read(fileDescriptor, in, 2000) > 0) {
+            // Daten vom Socket ==> in
+            printf("%s\n", in);
+
+            // Hier wird nun mit den Daten des Clients gearbeitet.
+            write(fileDescriptor, out, 2000); // Daten vom Array out ==> Socket
+        }
+        close(fileDescriptor);
     }
     return 0;
 }

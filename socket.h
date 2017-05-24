@@ -5,6 +5,7 @@
 #include <sys/socket.h> //FÜR UNIX
 #include <netinet/in.h> //FÜR UNIX
 #include <stdio.h>
+#include <unistd.h>
 #include "shmem.h"
 
 int start();
