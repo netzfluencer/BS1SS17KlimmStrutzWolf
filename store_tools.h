@@ -7,8 +7,9 @@ struct key_value{
     int key;
     char *value;
 };
-struct key_value kv[10];
+struct key_value kv[];
 
+int init(int length);
 int put(int key, char *value, char *resp, struct key_value kv[]);
 int get(int key, char *resp, struct key_value kv[]);
 int delete(int key, char *resp, struct key_value kv[]);

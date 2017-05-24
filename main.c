@@ -6,6 +6,8 @@
 
 
 int main() {
+    init(10);
+
     char *resp = "";
 
 
