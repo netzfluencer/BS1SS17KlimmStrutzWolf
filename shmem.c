@@ -12,9 +12,12 @@ int shmem() {
 
     if(shID >= 0) {
         myPtr = (struct key_value *) shmat(shID, 0, 0);
+        put(5, "testeer", "");
             for(int i= 0; i < STORELENGTH; i++) {
                 myPtr[i] = kv[i];
+                printf("%c", &myPtr[i].value);
             }
+
     }
     else {
         perror("shmget");
