@@ -7,7 +7,7 @@
 // 4. Eine Init-Funktion
 
 // Fragen an Betreuer:
-// 1. Socket Server testing: wie geht das einfach & schnell?
+// 1. Socket Server testing: Wie geht das einfach & schnell?
 // 2. Aufgaben Punktesystem: bei bestehen 50 Punkte oder ist das maximal Punktzahl für die beste Lösung?
 
 int init(int length){
