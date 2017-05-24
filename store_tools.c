@@ -44,7 +44,7 @@ int put(int key, char *value, char *resp, struct key_value kv[]){
     }
 
     *resp = (char) "Error: Put was not not successful.";
-    return 0;
+    return -1;
 }
 
 int get(int key, char *resp, struct key_value kv[]) {
@@ -57,7 +57,7 @@ int get(int key, char *resp, struct key_value kv[]) {
     }
 
     *resp = (char) "Error: Key not found.";
-    return 0;
+    return -1;
 }
 
 int delete(int key, char *resp, struct key_value kv[]) {
@@ -72,7 +72,7 @@ int delete(int key, char *resp, struct key_value kv[]) {
     }
 
     *resp = (char) "Error: Key not found.";
-    return 0;
+    return -1;
 }
 
 
