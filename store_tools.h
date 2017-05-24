@@ -2,16 +2,17 @@
 #define BS1SS17KLIMMSTRUTZWOLF_STORE_TOOLS_H
 
 #include <stdio.h>
+#define STORELENGTH 10
 
 struct key_value{
     int key;
     char *value;
 };
-struct key_value kv[];
+struct key_value kv[STORELENGTH];
 
 int init(int length);
-int put(int key, char *value, char *resp, struct key_value kv[]);
-int get(int key, char *resp, struct key_value kv[]);
-int delete(int key, char *resp, struct key_value kv[]);
+int put(int key, char *value, char *resp);
+int get(int key, char *resp);
+int delete(int key, char *resp);
 
 #endif //BS1SS17KLIMMSTRUTZWOLF_STORE_TOOLS_H

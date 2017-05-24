@@ -19,7 +19,7 @@ int init(int length){
     }
 }
 
-int put(int key, char *value, char *resp, struct key_value kv[]){
+int put(int key, char *value, char *resp){
     int emptyIndex = -1;
     *resp = (char) "";
     for(int i = 0; i < sizeof(kv); i++){
@@ -47,7 +47,7 @@ int put(int key, char *value, char *resp, struct key_value kv[]){
     return -1;
 }
 
-int get(int key, char *resp, struct key_value kv[]) {
+int get(int key, char *resp) {
     *resp = (char) "";
     for (int i = 0; i < sizeof(kv); i++) {
         if (kv[i].key == key) {
@@ -60,7 +60,7 @@ int get(int key, char *resp, struct key_value kv[]) {
     return -1;
 }
 
-int delete(int key, char *resp, struct key_value kv[]) {
+int delete(int key, char *resp) {
     *resp = (char) "";
     for (int i = 0; i < sizeof(kv); i++){
         if (kv[i].key == key){

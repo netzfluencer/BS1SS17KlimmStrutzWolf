@@ -11,21 +11,21 @@ int main() {
     char *resp = "";
 
 
-    put(8, "hgh", (char *) &resp, kv);
-    get(8, (char *) &resp, kv);
+    put(8, "hgh", (char *) &resp);
+    get(8, (char *) &resp);
 
     printf("%s\n", resp);
 
 
 
-    put(8, "testing", (char *) &resp, kv);
-    get(8, (char *) &resp, kv);
+    put(8, "testing", (char *) &resp);
+    get(8, (char *) &resp);
 
     printf("%s\n", resp);
 
 
 
-    delete(8, (char *) &resp, kv);
+    delete(8, (char *) &resp);
 
     printf("%s\n", resp);
 
