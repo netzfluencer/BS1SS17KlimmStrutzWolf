@@ -3,12 +3,13 @@
 
 #include "store_tools.h"
 #include "socket.h"
-
-//test
+//#include "shmem.h"
 
 int main() {
 
     char *resp = "";
+
+    //shmem();
 
 
     put(8, "hgh", (char *) &resp);

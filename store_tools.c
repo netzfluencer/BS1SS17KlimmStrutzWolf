@@ -11,12 +11,26 @@
 // 2. Aufgaben Punktesystem: bei bestehen 50 Punkte oder ist das maximal Punktzahl für die beste Lösung?
 
 
+int get(int key, char *resp) {
+    *resp = (char) "";
+    for (int i = 0; i < sizeof(kv)/ sizeof(struct key_value); i++) {
+        if (kv[i].key == key) {
+            *resp = (char) kv[i].value;
+            return 1;
+        }
+    }
+
+    *resp = (char) "Error: Key not found.";
+    return -1;
+}
+
+
 int put(int key, char *value, char *resp){
     int emptyIndex = -1;
     *resp = (char) "";
-    for(int i = 0; i < sizeof(kv); i++){
+    for(int i = 0; i < sizeof(kv)/ sizeof(struct key_value); i++){
         // Falls der Key existiert: Ueberschreiben, alten Wert zurueckgeben und return true
-        if(kv[i].key == key){
+        if(kv[i].key == key) {
             *resp = (char) kv[i].value;
             kv[i].value = value;
             return 1;
@@ -39,22 +53,10 @@ int put(int key, char *value, char *resp){
     return -1;
 }
 
-int get(int key, char *resp) {
-    *resp = (char) "";
-    for (int i = 0; i < sizeof(kv); i++) {
-        if (kv[i].key == key) {
-            *resp = (char) kv[i].value;
-            return 1;
-        }
-    }
-
-    *resp = (char) "Error: Key not found.";
-    return -1;
-}
 
 int delete(int key, char *resp) {
     *resp = (char) "";
-    for (int i = 0; i < sizeof(kv); i++){
+    for (int i = 0; i < sizeof(kv)/ sizeof(struct key_value); i++){
         if (kv[i].key == key){
             *resp = (char) kv[i].value;
             kv[i].value = NULL;
