@@ -10,7 +10,6 @@ struct key_value{
 };
 struct key_value kv[STORELENGTH];
 
-int init(int length);
 int put(int key, char *value, char *resp);
 int get(int key, char *resp);
 int delete(int key, char *resp);

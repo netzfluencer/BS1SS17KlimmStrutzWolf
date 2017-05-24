@@ -10,14 +10,6 @@
 // 1. Socket Server testing: Wie geht das einfach & schnell?
 // 2. Aufgaben Punktesystem: bei bestehen 50 Punkte oder ist das maximal Punktzahl für die beste Lösung?
 
-int init(int length){
-    if(length > 0) {
-        struct key_value kv[length];
-    }
-    else{
-        return -1;
-    }
-}
 
 int put(int key, char *value, char *resp){
     int emptyIndex = -1;
