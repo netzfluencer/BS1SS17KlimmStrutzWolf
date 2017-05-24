@@ -8,12 +8,11 @@
 #include <sys/ipc.h>
 #include <sys/shm.h>
 #include <sys/types.h>
+#include <stdio.h>
+#include "store_tools.h"
 
-const int sm_key = 4325;
+int sm_key = 4325;
 
-
-void *shmat(int shmid, const void *shmaddr, int shmflg);
-int shmdt(const void *shmaddr);
-int shmctl(int shmid, int kommando, struct shmid_ds *buf);
+int shm();
 
 #endif //BS1SS17KLIMMSTRUTZWOLF_SHARED_MEMORY_H

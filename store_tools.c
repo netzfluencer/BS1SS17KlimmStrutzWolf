@@ -9,12 +9,14 @@
 // Fragen an Betreuer:
 // 1. Socket Server testing: Wie geht das einfach & schnell?
 // 2. Aufgaben Punktesystem: bei bestehen 50 Punkte oder ist das maximal Punktzahl für die beste Lösung?
+// 3. Groesse eines unserer Stucts in Bytes herausfinden: Wie?
 
 int init(int length){
     if(length > 0) {
         struct key_value kv[length];
+        return 0;
     }
-    else{
+    else {
         return -1;
     }
 }

@@ -3,10 +3,12 @@
 
 #include "store_tools.h"
 #include "socket.h"
+#include "shared_memory.h"
 
 
 int main() {
-    init(10);
+
+    shm();
 
     char *resp = "";
 

@@ -1,7 +1,31 @@
-//
-// Created by User on 24.05.2017.
-//
-
 #include "shared_memory.h"
 
-int shmget(sm_key, 10000, IPC_CREAT | 0777);
+int shm() {
+    struct key_value *myPtr;
+    int kvlength = 10;
+
+    // bestimmen der Store Groesse
+    init(kvlength);
+
+    int shID = shmget(sm_key, kvlength * sizeof(struct key_value), IPC_CREAT | 0777);
+
+    if(shID >= 0) {
+        myPtr = (struct key_value *) shmat(shID, 0, 0);
+        if(myPtr == (struct key_value *) -1) {
+            perror("shmat");
+        }
+        else {
+
+            for(int i= 0; i < kvlength; i++) {
+                myPtr[i] = kv[i];
+            }
+
+
+        }
+    }
+    else {
+        perror("shmget");
+    }
+
+    return 0;
+}
