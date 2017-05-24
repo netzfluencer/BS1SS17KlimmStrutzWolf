@@ -18,19 +18,25 @@ int start(){
         perror("creating stream socket");
         exit(1);
     }
-    printf("Socket created.\n");
+    else {
+        printf("Socket created.\n");
+    }
 
 
+    int option = 1;
+    setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &option, sizeof(option));
 
     /* Binden eines Sockets */
     server.sin_family = AF_INET;
     server.sin_addr.s_addr = htonl(INADDR_ANY);
-    server.sin_port = htons(1995);
+    server.sin_port = htons(1996);
 
     if(bind( sock, (struct sockaddr *) &server, sizeof(server))<0){
         perror("Error on binding");
-    };
-    /*printf("Socket binded.\n");*/
+    }
+    else {
+        printf("Socket binded.\n");
+    }
 
     //Shared Memory erstellen
     shmem();
@@ -40,8 +46,11 @@ int start(){
     /* Auf Verbindung hören */
     if(listen(sock, 5)<0){
         perror("Error on listening");
-    };
-    /*printf("Listening...\n");*/
+    }
+    else {
+        printf("Listening...\n");
+    }
+
 
 
 
