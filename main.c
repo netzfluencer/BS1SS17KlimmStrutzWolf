@@ -8,7 +8,8 @@
 
 int main() {
 
-    shm();
+    //shm();
+    init(10);
 
     char *resp = "";
 
