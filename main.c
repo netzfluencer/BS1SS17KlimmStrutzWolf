@@ -3,35 +3,32 @@
 
 #include "store_tools.h"
 #include "socket.h"
-//#include "shmem.h"
 
 int main() {
 
     char *resp = "";
 
-    //shmem();
-
-
-    put(8, "hgh", (char *) &resp);
-    get(8, (char *) &resp);
-
-    printf("%s\n", resp);
-
-
-
-    put(8, "testing", (char *) &resp);
-    get(8, (char *) &resp);
-
-    printf("%s\n", resp);
-
-
-
-    delete(8, (char *) &resp);
-
-    printf("%s\n", resp);
-
-
-
+    //Socket anlegen
     start();
+
+//
+//    put(8, "hgh", (char *) &resp);
+//    get(8, (char *) &resp);
+//
+//    printf("%s\n", resp);
+//
+//
+//
+//    put(8, "testing", (char *) &resp);
+//    get(8, (char *) &resp);
+//
+//    printf("%s\n", resp);
+//
+//
+//
+//    delete(8, (char *) &resp);
+//
+//    printf("%s\n", resp);
+
     return 0;
 }

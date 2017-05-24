@@ -1,8 +1,4 @@
-//
-// Created by User on 22.05.2017.
-//
-
-
+#include <stdlib.h>
 #include "socket.h"
 
 int start(){
@@ -14,30 +10,49 @@ int start(){
 
     printf("Starting cKey-Server...\n");
 
+
+
     /* Anlegen eines Sockets */
     sock = socket(AF_INET, SOCK_STREAM, 0);
     if (sock < 0) {
         perror("creating stream socket");
-        exit(2);
+        exit(1);
     }
     printf("Socket created.\n");
 
+
+
     /* Binden eines Sockets */
     server.sin_family = AF_INET;
-    server.sin_addr.s_addr = INADDR_ANY;
-    server.sin_port = htons(4711);
-    bind( sock, (struct sockaddr *) &server, sizeof(server));
-    printf("Socket binded.\n");
+    server.sin_addr.s_addr = htonl(INADDR_ANY);
+    server.sin_port = htons(1995);
+
+    if(bind( sock, (struct sockaddr *) &server, sizeof(server))<0){
+        perror("Error on binding");
+    };
+    /*printf("Socket binded.\n");*/
+
+    //Shared Memory erstellen
+    shmem();
+
+
 
     /* Auf Verbindung hören */
-    listen(sock, 5);
-    printf("Listening...\n");
+    if(listen(sock, 5)<0){
+        perror("Error on listening");
+    };
+    /*printf("Listening...\n");*/
+
+
 
     /* Verbindung aktzeptieren */
     socklen_t client_len;
     client_len = sizeof(client);
 
-    fileDescriptor = accept(sock, (struct sockaddr*)&client, &client_len);
-    printf("Connection!\n");
+    while(1) {
+        fileDescriptor = accept(sock, (struct sockaddr *) &client, &client_len);
+        printf("Connection!\n");
+    }
+    return 0;
 }
 
