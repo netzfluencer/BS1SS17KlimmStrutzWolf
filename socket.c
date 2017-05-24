@@ -1,5 +1,14 @@
 #include <stdlib.h>
+#include <memory.h>
 #include "socket.h"
+
+int strtoken(char *str, char *separator, char **token, int size) {
+    int i=0;
+    token[0] = strtok(str, separator);
+    while(token[i++] && i < size)
+        token[i] = strtok(NULL, separator);
+    return (i);
+}
 
 int start(){
     /* Variablen für den Server */
@@ -9,6 +18,8 @@ int start(){
     int fileDescriptor;
     char in[2000]; // Daten vom Client an den Server
     char out[2000]; // Daten vom Server an den Client
+    char *in_splitted[3]; //Kommando bei 0, key bei 1, value bei 2
+
 
     printf("Starting cKey-Server...\n");
 
@@ -65,10 +76,21 @@ int start(){
         printf("Connection!\n");
         while(read(fileDescriptor, in, 2000) > 0) {
             // Daten vom Socket ==> in
-            printf("%s\n", in);
+
+            printf("Eingabe: %s\n", in);
+
+            strtoken(in, " ", in_splitted, 3);
+            printf("Befehl: %s\n", in_splitted[0]);
+            printf("Key: %s\n", in_splitted[1]);
+            printf("Value: %s\n", in_splitted[2]);
 
             // Hier wird nun mit den Daten des Clients gearbeitet.
-            write(fileDescriptor, out, 2000); // Daten vom Array out ==> Socket
+//            in[] = {0};
+//            in_splitted[0] = NULL;
+//            in_splitted[1] = NULL;
+//            in_splitted[2] = NULL;
+
+            // write(fileDescriptor, out, 2000); // Daten vom Array out ==> Socket
         }
         close(fileDescriptor);
     }
