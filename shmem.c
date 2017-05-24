@@ -15,7 +15,6 @@ int shmem() {
             for(int i= 0; i < STORELENGTH; i++) {
                 myPtr[i] = kv[i];
             }
-
     }
     else {
         perror("shmget");
