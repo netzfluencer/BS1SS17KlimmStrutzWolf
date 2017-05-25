@@ -87,14 +87,51 @@ int start(){
                 strtoken(in, " ", in_splitted, 3);
 
                 if (strcmp(in_splitted[0], "get") == 0) {
-                    strcpy(out, "cKey: get\n");
+                    // Prüfen ob der key Parameter existiert
+                    if (in_splitted[1] != NULL) {
+
+                        //HIER GET FUNKTION AUFRUFEN
+
+                        strcpy(out, "cKey-Action: get\n");
+                    }
+                    else {
+                        strcpy(out, "Err on get: No key submitted\n");
+                    }
                 }
+
+
                 else if(strcmp(in_splitted[0], "put") == 0) {
-                    strcpy(out, "cKey: put\n");
+                    if (in_splitted[1] != NULL) {
+                        // Prüfen ob ein value übergeben wurde
+                        if(in_splitted[2] != NULL) {
+
+                            // HIER PUT FUNKTION AUFRUFEN
+
+                            strcpy(out, "cKey-Action: put\n");
+                        }
+                        else {
+                            strcpy(out, "Err on put: No Value submitted\n");
+                        }
+                    }
+                    else {
+                        strcpy(out, "Err on put: No key submitted\n");
+                    }
                 }
+
+
                 else if(strcmp(in_splitted[0], "delete") == 0) {
-                    strcpy(out, "cKey: delete\n");
+                    if (in_splitted[1] != NULL) {
+
+                        // HIER DELETE FUNKTION AUFRUFEN
+
+                        strcpy(out, "cKey-Action: delete\n");
+                    }
+                    else {
+                        strcpy(out, "Err on delete: No key submitted\n");
+                    }
                 }
+
+
                 else {
                     strcpy(out, "Err: Unknown command\n");
                 }
