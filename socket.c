@@ -84,35 +84,37 @@ int start(){
 
             // Check: Kein leere Eingabe
             if(strlen(in)>0) {
-                printf("Telnet-Command: %s\n", in);
 
                 // Splitting von Cmd, Key, Value
                 strtoken(in, " ", in_splitted, 3);
 
-                // printf("CMD: %s\n", in_splitted[0]);
-                // printf("CMD-L: %zu\n", strlen(in_splitted[1]) );
-
                 if (strcmp(in_splitted[0], "get") == 0) {
-                    printf("Ein get!\n");
+                    strcpy(out, "cKey: get\n");
                 }
                 else if(strcmp(in_splitted[0], "put") == 0) {
-                    printf("Ein put!\n");
+                    strcpy(out, "cKey: put\n");
                 }
                 else if(strcmp(in_splitted[0], "delete") == 0) {
-                    printf("Ein delete!\n");
+                    strcpy(out, "cKey: delete\n");
+                }
+                else {
+                    strcpy(out, "Err: Unknown command\n");
                 }
 
-                // Nach Befehl Ausführung in_splitted chars wieder loeschen und frei machen
+                // Nach Befehl Ausführung "in_splitted" chars wieder loeschen und frei machen
                 // memset(in_splitted[0],0,strlen(in_splitted[0]));
                 // memset(in_splitted[1],0,strlen(in_splitted[1]));
                 // memset(in_splitted[2],0,strlen(in_splitted[2]));
             }
 
-            // Nach Befehl Ausführung in chars wieder loeschen und frei machen
+
+
+
+            write(fileDescriptor, out, strlen(out)); // Daten vom Array out ==> Socket
+
+            // Nach Befehl Ausführung "in" und "out" chars wieder loeschen und frei machen
             memset(in,0,strlen(in));
-
-
-            // write(fileDescriptor, out, 2000); // Daten vom Array out ==> Socket
+            memset(out,0,strlen(out));
         }
         close(fileDescriptor);
     }
