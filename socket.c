@@ -77,21 +77,35 @@ int start(){
         while(read(fileDescriptor, in, 2000) > 0) {
             // Daten vom Socket ==> in
 
-            // Loeschen des "ENTER"s
-            strtok(in, "\n");
+            // Loeschen des "ENTER"s & des "Carriage Return" (letzte zwei Zeichen)
+            in[strlen(in)-1] = 0;
+            in[strlen(in)-1] = 0;
 
 
             // Check: Kein leere Eingabe
-            if(strlen(in)>1) {
+            if(strlen(in)>0) {
                 printf("Telnet-Command: %s\n", in);
 
                 // Splitting von Cmd, Key, Value
                 strtoken(in, " ", in_splitted, 3);
 
+                // printf("CMD: %s\n", in_splitted[0]);
+                // printf("CMD-L: %zu\n", strlen(in_splitted[1]) );
+
+                if (strcmp(in_splitted[0], "get") == 0) {
+                    printf("Ein get!\n");
+                }
+                else if(strcmp(in_splitted[0], "put") == 0) {
+                    printf("Ein put!\n");
+                }
+                else if(strcmp(in_splitted[0], "delete") == 0) {
+                    printf("Ein delete!\n");
+                }
+
                 // Nach Befehl Ausführung in_splitted chars wieder loeschen und frei machen
-                memset(in_splitted[0],0,strlen(in_splitted[0]));
-                memset(in_splitted[1],0,strlen(in_splitted[1]));
-                memset(in_splitted[2],0,strlen(in_splitted[2]));
+                // memset(in_splitted[0],0,strlen(in_splitted[0]));
+                // memset(in_splitted[1],0,strlen(in_splitted[1]));
+                // memset(in_splitted[2],0,strlen(in_splitted[2]));
             }
 
             // Nach Befehl Ausführung in chars wieder loeschen und frei machen
