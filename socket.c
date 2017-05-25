@@ -88,9 +88,11 @@ int start(){
 
                 if (strcmp(in_splitted[0], "get") == 0) {
                     // Prüfen ob der key Parameter existiert
+
                     if (in_splitted[1] != NULL) {
 
                         //HIER GET FUNKTION AUFRUFEN
+                        get(token[1], *resp);
 
                         strcpy(out, "cKey-Action: get\n");
                     }
@@ -106,6 +108,7 @@ int start(){
                         if(in_splitted[2] != NULL) {
 
                             // HIER PUT FUNKTION AUFRUFEN
+                            put(token[1], token[2], *resp);
 
                             strcpy(out, "cKey-Action: put\n");
                         }
@@ -123,6 +126,7 @@ int start(){
                     if (in_splitted[1] != NULL) {
 
                         // HIER DELETE FUNKTION AUFRUFEN
+                        delete(token[1], *resp);
 
                         strcpy(out, "cKey-Action: delete\n");
                     }
