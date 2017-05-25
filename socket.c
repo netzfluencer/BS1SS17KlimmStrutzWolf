@@ -1,5 +1,3 @@
-#include <stdlib.h>
-#include <memory.h>
 #include "socket.h"
 
 int strtoken(char *str, char *separator, char **token, int size) {
@@ -51,7 +49,7 @@ int start(){
         printf("Socket binded.\n");
     }
 
-    //Shared Memory erstellen
+    //Shared Memory anlegen
     shmem();
 
 
@@ -82,7 +80,7 @@ int start(){
             in[strlen(in)-1] = 0;
 
 
-            // Check: Kein leere Eingabe
+            // Check: Keine leere Eingabe
             if(strlen(in)>0) {
 
                 // Splitting von Cmd, Key, Value
@@ -101,10 +99,10 @@ int start(){
                     strcpy(out, "Err: Unknown command\n");
                 }
 
-                // Nach Befehl Ausführung "in_splitted" chars wieder loeschen und frei machen
-                // memset(in_splitted[0],0,strlen(in_splitted[0]));
-                // memset(in_splitted[1],0,strlen(in_splitted[1]));
-                // memset(in_splitted[2],0,strlen(in_splitted[2]));
+                // "in_splitted" chars wieder loeschen und frei machen
+                memset(in_splitted[0],0,strlen(in_splitted[0]));
+                if (in_splitted[1] != NULL) memset(in_splitted[1],0,strlen(in_splitted[1]));
+                if (in_splitted[2] != NULL) memset(in_splitted[2],0,strlen(in_splitted[2]));
             }
 
 
@@ -112,7 +110,7 @@ int start(){
 
             write(fileDescriptor, out, strlen(out)); // Daten vom Array out ==> Socket
 
-            // Nach Befehl Ausführung "in" und "out" chars wieder loeschen und frei machen
+            // "in" und "out" chars wieder loeschen und frei machen
             memset(in,0,strlen(in));
             memset(out,0,strlen(out));
         }

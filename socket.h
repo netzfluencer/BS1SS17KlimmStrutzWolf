@@ -6,6 +6,8 @@
 #include <netinet/in.h> //FÜR UNIX
 #include <stdio.h>
 #include <unistd.h>
+#include <stdlib.h>
+#include <memory.h>
 #include "shmem.h"
 
 int start();
