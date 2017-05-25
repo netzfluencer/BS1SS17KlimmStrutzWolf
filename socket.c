@@ -80,28 +80,24 @@ int start(){
             // Loeschen des "ENTER"s
             strtok(in, "\n");
 
-            // Splitting von Cmd, Key, Value
-            strtoken(in, " ", in_splitted, 3);
 
-            printf("Eingabe: %s\n", in);
-            printf("Befehl: %s\n", in_splitted[0]);
-            printf("Key: %s\n", in_splitted[1]);
-            printf("Value: %s\n", in_splitted[2]);
+            // Check: Kein leere Eingabe
+            if(strlen(in)>1) {
+                printf("Telnet-Command: %s\n", in);
 
+                // Splitting von Cmd, Key, Value
+                strtoken(in, " ", in_splitted, 3);
 
+                // Nach Befehl Ausführung in_splitted chars wieder loeschen und frei machen
+                memset(in_splitted[0],0,strlen(in_splitted[0]));
+                memset(in_splitted[1],0,strlen(in_splitted[1]));
+                memset(in_splitted[2],0,strlen(in_splitted[2]));
+            }
 
-            // Hier wird nun mit den Daten des Clients gearbeitet.
-
-
-
-
-
-
-            //Nach Befehl Ausführung in und in_splitted chars wieder loeschen und frei machen
+            // Nach Befehl Ausführung in chars wieder loeschen und frei machen
             memset(in,0,strlen(in));
-            memset(in_splitted[0],0,strlen(in_splitted[0]));
-            memset(in_splitted[1],0,strlen(in_splitted[1]));
-            memset(in_splitted[2],0,strlen(in_splitted[2]));
+
+
             // write(fileDescriptor, out, 2000); // Daten vom Array out ==> Socket
         }
         close(fileDescriptor);
