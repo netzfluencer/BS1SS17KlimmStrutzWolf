@@ -91,6 +91,7 @@ int start(){
                     if (in_splitted[1] != NULL) {
 
                         //HIER GET FUNKTION AUFRUFEN
+                        get(in_splitted[1], "");
 
                         strcpy(out, "cKey-Action: get\n");
                     }
@@ -123,6 +124,7 @@ int start(){
                     if (in_splitted[1] != NULL) {
 
                         // HIER DELETE FUNKTION AUFRUFEN
+                            delete(in_splitted[1], "");
 
                         strcpy(out, "cKey-Action: delete\n");
                     }
