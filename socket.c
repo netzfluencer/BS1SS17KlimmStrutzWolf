@@ -107,6 +107,7 @@ int start(){
                         if(in_splitted[2] != NULL) {
 
                             // HIER PUT FUNKTION AUFRUFEN
+                            put(in_splitted[1], in_splitted[2], "");
 
                             strcpy(out, "cKey-Action: put\n");
                         }
