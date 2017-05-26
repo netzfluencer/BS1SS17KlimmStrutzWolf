@@ -79,7 +79,15 @@ int start(){
             in[strlen(in)-1] = 0;
             in[strlen(in)-1] = 0;
 
+            // hier fork()
+            int pid = fork();
+            // mit kindprozess weiterarbeiten. Was soll Kind machen?
+            /*if (pid == 0){
 
+            }
+            if (pid ==1){
+
+            }*/
             // Check: Keine leere Eingabe
             if(strlen(in)>0) {
 
