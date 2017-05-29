@@ -71,70 +71,77 @@ int start() {
         printf("Connection!\n");
         while (read(fileDescriptor, in, 2000) > 0) {
             // Daten vom Socket ==> in
+            pid = fork();
 
-            // Loeschen des "ENTER"s & des "Carriage Return" (letzte zwei Zeichen)
-            in[strlen(in) - 1] = 0;
-            in[strlen(in) - 1] = 0;
+            if (pid == 1) { //Vaterprozess einleiten
+                continue;
+            } else if (pid == 0) { //via Kindprozess arbeiten
+                // Loeschen des "ENTER"s & des "Carriage Return" (letzte zwei Zeichen)
+                in[strlen(in) - 1] = 0;
+                in[strlen(in) - 1] = 0;
 
 
-            // Check: Keine leere Eingabe
-            if (strlen(in) > 0) {
+                // Check: Keine leere Eingabe
+                if (strlen(in) > 0) {
 
-                // Splitting von Cmd, Key, Value
-                strtoken(in, " ", in_splitted, 3);
+                    // Splitting von Cmd, Key, Value
+                    strtoken(in, " ", in_splitted, 3);
 
-                if (strcmp(in_splitted[0], "get") == 0) {
-                    // Prüfen ob der key Parameter existiert
-                    if (in_splitted[1] != NULL) {
+                    if (strcmp(in_splitted[0], "get") == 0) {
+                        // Prüfen ob der key Parameter existiert
+                        if (in_splitted[1] != NULL) {
 
-                        get(in_splitted[1], "");
+                            get(in_splitted[1], "");
 
-                        strcpy(out, "cKey-Action: get\n");
-                    } else {
-                        strcpy(out, "Err on get: No key submitted\n");
-                    }
-                } else if (strcmp(in_splitted[0], "put") == 0) {
-                    if (in_splitted[1] != NULL) {
-                        // Prüfen ob ein value übergeben wurde
-                        if (in_splitted[2] != NULL) {
-
-                            put(in_splitted[1], in_splitted[2], "");
-
-                            strcpy(out, "cKey-Action: put\n");
+                            strcpy(out, "cKey-Action: get\n");
                         } else {
-                            strcpy(out, "Err on put: No Value submitted\n");
+                            strcpy(out, "Err on get: No key submitted\n");
+                        }
+                    } else if (strcmp(in_splitted[0], "put") == 0) {
+                        if (in_splitted[1] != NULL) {
+                            // Prüfen ob ein value übergeben wurde
+                            if (in_splitted[2] != NULL) {
+
+                                put(in_splitted[1], in_splitted[2], "");
+
+                                strcpy(out, "cKey-Action: put\n");
+                            } else {
+                                strcpy(out, "Err on put: No Value submitted\n");
+                            }
+                        } else {
+                            strcpy(out, "Err on put: No key submitted\n");
+                        }
+                    } else if (strcmp(in_splitted[0], "delete") == 0) {
+                        if (in_splitted[1] != NULL) {
+
+                            delete (in_splitted[1], "");
+
+                            strcpy(out, "cKey-Action: delete\n");
+                        } else {
+                            strcpy(out, "Err on delete: No key submitted\n");
                         }
                     } else {
-                        strcpy(out, "Err on put: No key submitted\n");
+                        strcpy(out, "Err: Unknown command\n");
                     }
-                } else if (strcmp(in_splitted[0], "delete") == 0) {
-                    if (in_splitted[1] != NULL) {
 
-                        delete(in_splitted[1], "");
-
-                        strcpy(out, "cKey-Action: delete\n");
-                    } else {
-                        strcpy(out, "Err on delete: No key submitted\n");
-                    }
-                } else {
-                    strcpy(out, "Err: Unknown command\n");
+                    // "in_splitted" chars wieder loeschen und frei machen
+                    memset(in_splitted[0], 0, strlen(in_splitted[0]));
+                    if (in_splitted[1] != NULL) memset(in_splitted[1], 0, strlen(in_splitted[1]));
+                    if (in_splitted[2] != NULL) memset(in_splitted[2], 0, strlen(in_splitted[2]));
                 }
 
-                // "in_splitted" chars wieder loeschen und frei machen
-                memset(in_splitted[0], 0, strlen(in_splitted[0]));
-                if (in_splitted[1] != NULL) memset(in_splitted[1], 0, strlen(in_splitted[1]));
-                if (in_splitted[2] != NULL) memset(in_splitted[2], 0, strlen(in_splitted[2]));
-            }
+
+                write(fileDescriptor, out, strlen(out)); // Daten vom Array out ==> Socket
+
+                // "in" und "out" chars wieder loeschen und frei machen
+                memset(in, 0, strlen(in));
+                memset(out, 0, strlen(out));
+
+                close(fileDescriptor);
+            }else strcpy(out, "Err on fork: process failed\n"); // falls fork nicht funktioniert
 
 
-            write(fileDescriptor, out, strlen(out)); // Daten vom Array out ==> Socket
-
-            // "in" und "out" chars wieder loeschen und frei machen
-            memset(in, 0, strlen(in));
-            memset(out, 0, strlen(out));
-        }
-        close(fileDescriptor);
     }
     return 0;
-}
+}}
 
