@@ -11,5 +11,7 @@
 #include "shmem.h"
 
 int start();
+int pid;
+
 
 #endif //BS1SS17KLIMMSTRUTZWOLF_SOCKET_H

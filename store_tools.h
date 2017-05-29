@@ -13,5 +13,7 @@ struct key_value kv[STORELENGTH];
 int put(int key, char *value, char *resp);
 int get(int key, char *resp);
 int delete(int key, char *resp);
+int strtrenn(char *str, char *token[]);
+
 
 #endif //BS1SS17KLIMMSTRUTZWOLF_STORE_TOOLS_H

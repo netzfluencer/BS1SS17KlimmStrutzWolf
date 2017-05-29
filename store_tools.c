@@ -1,3 +1,4 @@
+#include <string.h>
 #include "store_tools.h"
 
 // Fragen ans Team:
@@ -67,6 +68,14 @@ int delete(int key, char *resp) {
 
     *resp = (char) "Error: Key not found.";
     return -1;
+}
+
+int strtrenn(char *in, char *in_splitted[]){
+    int i=0;
+    in_splitted[0]= strtok(in, " ");
+    while(in_splitted[i++] && i<3)
+        in_splitted[i] = strtok(NULL, " ");
+    return i;
 }
 
 

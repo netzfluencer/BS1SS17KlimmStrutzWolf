@@ -1,5 +1,7 @@
 #include "socket.h"
 
+
+
 int strtoken(char *str, char *separator, char **token, int size) {
     int i = 0;
     token[0] = strtok(str, separator);
@@ -69,22 +71,26 @@ int start() {
         printf("Connection!\n");
         while (read(fileDescriptor, in, 2000) > 0) {
             // Daten vom Socket ==> in
-            int pid = fork();
+            pid = fork();
 
-            if (pid == 1) { //Vaterprozess einleiten
+            if (pid > 0) { //Vaterprozess einleiten
                 continue;
 
             } else if (pid == 0) { //via Kindprozess arbeiten
                 // Loeschen des "ENTER"s & des "Carriage Return" (letzte zwei Zeichen)
-                in[strlen(in) - 1] = 0;
-                in[strlen(in) - 1] = 0;
+                //Funktioniert nicht wie geplant
+                //in[strlen(in) - 1] = 0;
+                //in[strlen(in) - 1] = 0;
 
 
                 // Check: Keine leere Eingabe
                 if (strlen(in) > 0) {
 
                     // Splitting von Cmd, Key, Value
-                    strtoken(in, " ", in_splitted, 3);
+                    //strtoken(in," ", in_splitted, 0);
+                    strtrenn(in, in_splitted);
+
+                    printf("%s, %s, %s", in_splitted[0], in_splitted[1], in_splitted[2]);
 
                     if (strcmp(in_splitted[0], "get") == 0) {
                         // Prüfen ob der key Parameter existiert
@@ -100,6 +106,7 @@ int start() {
                         if (in_splitted[1] != NULL) {
                             // Prüfen ob ein value übergeben wurde
                             if (in_splitted[2] != NULL) {
+                                printf("bin da");
 
                                 put((int)in_splitted[1], in_splitted[2], "");
 
@@ -137,7 +144,7 @@ int start() {
                 memset(out, 0, strlen(out));
 
                 close(fileDescriptor);
-            }else strcpy(out, "Err on fork: process failed\n"); // falls fork nicht funktioniert
+            }else printf("Geht nicht :("); //exit(-1); falls fork nicht funktioniert
 
 
     }
