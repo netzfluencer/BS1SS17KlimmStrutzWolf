@@ -48,9 +48,7 @@ int start() {
     }
 
     //Shared Memory anlegen
-    shmem();
-
-
+    //shmem();
 
     /* Auf Verbindung hören */
     if (listen(sock, 5) < 0) {
@@ -71,10 +69,11 @@ int start() {
         printf("Connection!\n");
         while (read(fileDescriptor, in, 2000) > 0) {
             // Daten vom Socket ==> in
-            pid = fork();
+            int pid = fork();
 
             if (pid == 1) { //Vaterprozess einleiten
                 continue;
+
             } else if (pid == 0) { //via Kindprozess arbeiten
                 // Loeschen des "ENTER"s & des "Carriage Return" (letzte zwei Zeichen)
                 in[strlen(in) - 1] = 0;
@@ -91,7 +90,7 @@ int start() {
                         // Prüfen ob der key Parameter existiert
                         if (in_splitted[1] != NULL) {
 
-                            get(in_splitted[1], "");
+                            get((int)in_splitted[1], "");
 
                             strcpy(out, "cKey-Action: get\n");
                         } else {
@@ -102,7 +101,7 @@ int start() {
                             // Prüfen ob ein value übergeben wurde
                             if (in_splitted[2] != NULL) {
 
-                                put(in_splitted[1], in_splitted[2], "");
+                                put((int)in_splitted[1], in_splitted[2], "");
 
                                 strcpy(out, "cKey-Action: put\n");
                             } else {
@@ -114,7 +113,7 @@ int start() {
                     } else if (strcmp(in_splitted[0], "delete") == 0) {
                         if (in_splitted[1] != NULL) {
 
-                            delete (in_splitted[1], "");
+                            delete ((int)in_splitted[1], "");
 
                             strcpy(out, "cKey-Action: delete\n");
                         } else {
