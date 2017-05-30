@@ -114,7 +114,7 @@ int start(){
                         if (in_splitted[2] != NULL) {
 
                             // HIER PUT FUNKTION AUFRUFEN
-                            put(8, "lol", (char *) &resp);
+                            put(4, "wer", (char *) &resp);
                             printf("Alt: %s\n", resp);
 
                             strcpy(out, "cKey-Action: put\n");

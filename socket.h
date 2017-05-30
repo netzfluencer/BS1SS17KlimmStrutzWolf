@@ -8,6 +8,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <memory.h>
+#include "store_tools.h"
 
 int start();
 int pid;
