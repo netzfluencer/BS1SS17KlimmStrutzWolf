@@ -50,7 +50,7 @@ int put(int key, char *value, char *resp){
         return 1;
     }
 
-    *resp = (char) "Error: Put was not not successful.";
+    *resp = (char) "Error: Put was not successful.";
     return -1;
 }
 

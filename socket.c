@@ -1,24 +1,28 @@
 #include "socket.h"
 
-
-
 int strtoken(char *str, char *separator, char **token, int size) {
-    int i = 0;
+    int i=0;
     token[0] = strtok(str, separator);
-    while (token[i++] && i < size)
+    while(token[i++] && i < size)
         token[i] = strtok(NULL, separator);
     return (i);
 }
 
-int start() {
+int start(){
     /* Variablen für den Server */
     int sock;
+    int run = 1;
+
     struct sockaddr_in server;
     struct sockaddr_in client;
     int fileDescriptor;
-    char in[2000]; // Daten vom Client an den Server
-    char out[2000]; // Daten vom Server an den Client
+    char in[2000];
+    char out[2000];
+    //char in[BUFSIZ]; // Daten vom Client an den Server
+    //char out[BUFSIZ]; // Daten vom Server an den Client
     char *in_splitted[3]; //Kommando bei 0, key bei 1, value bei 2
+    char *resp = "";
+    //char resp[BUFSIZ];
 
 
     printf("Starting cKey-Server...\n");
@@ -30,7 +34,8 @@ int start() {
     if (sock < 0) {
         perror("creating stream socket");
         exit(1);
-    } else {
+    }
+    else {
         printf("Socket created.\n");
     }
 
@@ -43,19 +48,23 @@ int start() {
     server.sin_addr.s_addr = htonl(INADDR_ANY);
     server.sin_port = htons(1996);
 
-    if (bind(sock, (struct sockaddr *) &server, sizeof(server)) < 0) {
+    if(bind( sock, (struct sockaddr *) &server, sizeof(server))<0){
         perror("Error on binding");
-    } else {
+    }
+    else {
         printf("Socket binded.\n");
     }
 
     //Shared Memory anlegen
-    //shmem();
+    shmem();
+
+
 
     /* Auf Verbindung hören */
-    if (listen(sock, 5) < 0) {
+    if(listen(sock, 5)<0){
         perror("Error on listening");
-    } else {
+    }
+    else {
         printf("Listening...\n");
     }
 
@@ -66,88 +75,93 @@ int start() {
     socklen_t client_len;
     client_len = sizeof(client);
 
-    while (1) {
+    while(1) {
         fileDescriptor = accept(sock, (struct sockaddr *) &client, &client_len);
+        int pid = fork();
+        if (pid < 0){
+            perror("Error on fork");
+            exit(1);
+        }
+        if (pid == 0){
+
         printf("Connection!\n");
-        while (read(fileDescriptor, in, 2000) > 0) {
+        while(run == 1) {
+            read(fileDescriptor, in, 2000);
             // Daten vom Socket ==> in
-            pid = fork();
 
-            if (pid > 0) { //Vaterprozess einleiten
-                continue;
+            //bzero(resp,BUFSIZ);
 
-            } else if (pid == 0) { //via Kindprozess arbeiten
-                // Loeschen des "ENTER"s & des "Carriage Return" (letzte zwei Zeichen)
-                //Funktioniert nicht wie geplant
-                //in[strlen(in) - 1] = 0;
-                //in[strlen(in) - 1] = 0;
+            // Loeschen des "ENTER"s & des "Carriage Return" (letzte zwei Zeichen)
+            in[strlen(in) - 1] = 0;
+            in[strlen(in) - 1] = 0;
 
 
-                // Check: Keine leere Eingabe
-                if (strlen(in) > 0) {
+            // Check: Keine leere Eingabe
+            if (strlen(in) > 0) {
 
-                    // Splitting von Cmd, Key, Value
-                    //strtoken(in," ", in_splitted, 0);
-                    strtrenn(in, in_splitted);
+                // Splitting von Cmd, Key, Value
+                strtoken(in, " ", in_splitted, 3);
 
-                    printf("%s, %s, %s", in_splitted[0], in_splitted[1], in_splitted[2]);
+                if (strcmp(in_splitted[0], "get") == 0) {
+                    // Prüfen ob der key Parameter existiert
+                    if (in_splitted[1] != NULL) {
 
-                    if (strcmp(in_splitted[0], "get") == 0) {
-                        // Prüfen ob der key Parameter existiert
-                        if (in_splitted[1] != NULL) {
+                        //HIER GET FUNKTION AUFRUFEN
 
-                            get((int)in_splitted[1], "");
+                        strcpy(out, "cKey-Action: get\n");
+                    } else {
+                        strcpy(out, "Err on get: No key submitted\n");
+                    }
+                } else if (strcmp(in_splitted[0], "put") == 0) {
+                    if (in_splitted[1] != NULL) {
+                        // Prüfen ob ein value übergeben wurde
+                        if (in_splitted[2] != NULL) {
 
-                            strcpy(out, "cKey-Action: get\n");
+                            // HIER PUT FUNKTION AUFRUFEN
+                            put(8, "lol", (char *) &resp);
+                            printf("Alt: %s\n", resp);
+
+                            strcpy(out, "cKey-Action: put\n");
                         } else {
-                            strcpy(out, "Err on get: No key submitted\n");
-                        }
-                    } else if (strcmp(in_splitted[0], "put") == 0) {
-                        if (in_splitted[1] != NULL) {
-                            // Prüfen ob ein value übergeben wurde
-                            if (in_splitted[2] != NULL) {
-                                printf("bin da");
-
-                                put((int)in_splitted[1], in_splitted[2], "");
-
-                                strcpy(out, "cKey-Action: put\n");
-                            } else {
-                                strcpy(out, "Err on put: No Value submitted\n");
-                            }
-                        } else {
-                            strcpy(out, "Err on put: No key submitted\n");
-                        }
-                    } else if (strcmp(in_splitted[0], "delete") == 0) {
-                        if (in_splitted[1] != NULL) {
-
-                            delete ((int)in_splitted[1], "");
-
-                            strcpy(out, "cKey-Action: delete\n");
-                        } else {
-                            strcpy(out, "Err on delete: No key submitted\n");
+                            strcpy(out, "Err on put: No Value submitted\n");
                         }
                     } else {
-                        strcpy(out, "Err: Unknown command\n");
+                        strcpy(out, "Err on put: No key submitted\n");
                     }
+                } else if (strcmp(in_splitted[0], "delete") == 0) {
+                    if (in_splitted[1] != NULL) {
 
-                    // "in_splitted" chars wieder loeschen und frei machen
-                    memset(in_splitted[0], 0, strlen(in_splitted[0]));
-                    if (in_splitted[1] != NULL) memset(in_splitted[1], 0, strlen(in_splitted[1]));
-                    if (in_splitted[2] != NULL) memset(in_splitted[2], 0, strlen(in_splitted[2]));
+                        // HIER DELETE FUNKTION AUFRUFEN
+
+                        strcpy(out, "cKey-Action: delete\n");
+                    } else {
+                        strcpy(out, "Err on delete: No key submitted\n");
+                    }
+                } else if (strcmp(in_splitted[0], "exit") == 0) {
+                    run = -1;
+                } else {
+                    strcpy(out, "Err: Unknown command\n");
                 }
 
-
-                write(fileDescriptor, out, strlen(out)); // Daten vom Array out ==> Socket
-
-                // "in" und "out" chars wieder loeschen und frei machen
-                memset(in, 0, strlen(in));
-                memset(out, 0, strlen(out));
-
-                close(fileDescriptor);
-            }else printf("Geht nicht :("); //exit(-1); falls fork nicht funktioniert
+                // "in_splitted" chars wieder loeschen und frei machen
+                memset(in_splitted[0], 0, strlen(in_splitted[0]));
+                if (in_splitted[1] != NULL) memset(in_splitted[1], 0, strlen(in_splitted[1]));
+                if (in_splitted[2] != NULL) memset(in_splitted[2], 0, strlen(in_splitted[2]));
+            }
 
 
-    }
-    return 0;
-}}
+
+
+            write(fileDescriptor, out, strlen(out)); // Daten vom Array out ==> Socket
+
+            // "in" und "out" chars wieder loeschen und frei machen
+            memset(in,0,strlen(in));
+            memset(out,0,strlen(out));
+
+        }
+        close(fileDescriptor);
+    } else close(fileDescriptor);
+
+} return 0;
+}
 
