@@ -5,17 +5,14 @@
 #include "socket.h"
 
 int main() {
-    //kv_init[9].key = 123;
-    //kv_init[9].value = "hi";
     shmem();
-    //printf("Ausgabe: %s\n",kv[9].value);
-    //kv[9].value = "123";
-    //printf("Ausgabe: %s\n",kv[9].value);
+
 
     char *resp = "";
     //char resp[BUFSIZ];
 
 
+    /* TESTDATEN
     put(4, "depp", (char *) &resp);
     printf("PUT return: %s\n", resp);
 
@@ -24,12 +21,7 @@ int main() {
 
     put(4, "lol", (char *) &resp);
     printf("PUT return: %s\n", resp);
-
-
-
-
-
-
+    */
     //Socket anlegen
     start();
 

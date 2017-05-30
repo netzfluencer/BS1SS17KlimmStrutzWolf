@@ -67,12 +67,14 @@ int start(){
 
 
 
-    /* Verbindung aktzeptieren */
+
     socklen_t client_len;
     client_len = sizeof(client);
 
     while(1) {
+        /* Verbindung aktzeptieren */
         fileDescriptor = accept(sock, (struct sockaddr *) &client, &client_len);
+
         int pid = fork();
         if (pid < 0){
             perror("Error on fork");
@@ -103,7 +105,7 @@ int start(){
                     if (in_splitted[1] != NULL) {
 
                         //HIER GET FUNKTION AUFRUFEN
-
+                        get(in_splitted[1], (char*) &resp);
                         strcpy(out, "cKey-Action: get\n");
                     } else {
                         strcpy(out, "Err on get: No key submitted\n");
@@ -114,7 +116,7 @@ int start(){
                         if (in_splitted[2] != NULL) {
 
                             // HIER PUT FUNKTION AUFRUFEN
-                            put(4, "wer", (char *) &resp);
+                            put(in_splitted[1], in_splitted[2], (char *) &resp);
                             printf("Alt: %s\n", resp);
 
                             strcpy(out, "cKey-Action: put\n");
@@ -128,6 +130,7 @@ int start(){
                     if (in_splitted[1] != NULL) {
 
                         // HIER DELETE FUNKTION AUFRUFEN
+                        delete(in_splitted[1], (char*) &resp);
 
                         strcpy(out, "cKey-Action: delete\n");
                     } else {
@@ -156,6 +159,7 @@ int start(){
 
         }
         close(fileDescriptor);
+
     } else close(fileDescriptor);
 
 } return 0;
