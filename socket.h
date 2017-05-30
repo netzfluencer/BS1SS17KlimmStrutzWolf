@@ -8,7 +8,6 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <memory.h>
-#include "shmem.h"
 
 int start();
 int pid;

@@ -55,9 +55,6 @@ int start(){
         printf("Socket binded.\n");
     }
 
-    //Shared Memory anlegen
-    shmem();
-
 
 
     /* Auf Verbindung hören */
@@ -67,7 +64,6 @@ int start(){
     else {
         printf("Listening...\n");
     }
-
 
 
 

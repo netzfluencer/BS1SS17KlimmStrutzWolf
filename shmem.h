@@ -11,7 +11,9 @@
 #include <stdio.h>
 #include "store_tools.h"
 
+struct key_value *kv;
 
 int shmem();
+
 #endif //BS1SS17KLIMMSTRUTZWOLF_SHMEM_H
 
