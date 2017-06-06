@@ -28,11 +28,12 @@ int get(int key, char *resp) {
 
 int put(int key, char *value, char *resp){
     int emptyIndex = -1;
-    *resp = (char) "";
+    //strcpy(resp, "");
+    resp = "";
     for(int i = 0; i < STORELENGTH; i++){
         // Falls der Key existiert: Ueberschreiben, alten Wert zurueckgeben und return true
         if(kv[i].key == key) {
-            *resp = (char) kv[i].value;
+            resp = kv[i].value;
             kv[i].value = value;
             return 1;
         }
@@ -45,7 +46,7 @@ int put(int key, char *value, char *resp){
     // Wenn es einen leeren Index gab, dort rein speichern.
     if(emptyIndex > -1) {
         kv[emptyIndex].key = key;
-        *resp = (char) "";
+        resp = "";
         kv[emptyIndex].value = value;
         return 1;
     }

@@ -82,10 +82,11 @@ int start(){
 
         printf("Connection!\n");
         while(run == 1) {
+            bzero(in,2000);
             read(fileDescriptor, in, 2000);
             // Daten vom Socket ==> in
 
-            //bzero(resp,BUFSIZ);
+
 
             // Loeschen des "ENTER"s & des "Carriage Return" (letzte zwei Zeichen)
             in[strlen(in) - 1] = 0;
@@ -102,7 +103,8 @@ int start(){
                     // Prüfen ob der key Parameter existiert
                     if (in_splitted[1] != NULL) {
 
-                        //HIER GET FUNKTION AUFRUFEN
+                        get(4, (char *) &resp);
+                        printf("Ausgabe: %s\n", resp);
 
                         strcpy(out, "cKey-Action: get\n");
                     } else {
