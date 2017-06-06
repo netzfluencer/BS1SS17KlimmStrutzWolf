@@ -56,7 +56,7 @@ int put(int key, char *value, char *resp){
 }
 
 
-int delete(int key, char *resp) {
+int delete(int key, char *resp){
     *resp = (char) "";
     for (int i = 0; i < STORELENGTH; i++){
         if (kv[i].key == key){
