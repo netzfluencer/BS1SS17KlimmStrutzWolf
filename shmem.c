@@ -4,7 +4,7 @@
 int shmem() {
     int sm_key = 4325;
 
-    int shID = shmget(sm_key, STORELENGTH * sizeof(struct key_value), IPC_CREAT | 0777);
+    int shID = shmget(IPC_PRIVATE, STORELENGTH* sizeof(KEY_VALUE), IPC_CREAT | 0777);
 
     if(shID >= 0) {
         kv = (struct key_value *) shmat(shID, 0, 0);

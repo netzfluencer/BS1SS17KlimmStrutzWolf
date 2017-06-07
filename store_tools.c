@@ -1,82 +1,60 @@
 #include <string.h>
 #include "store_tools.h"
 
-// Fragen ans Team:
-// 1. Wir koennten in Anbetracht von REST hier mit HTTP Status Codes arbeiten - EDIT: Besser nicht
-// 2. Wir sollten die Key vllt als char deklarieren
-// 3. Die Übergabe des structs macht im Moment keinen Sinn, da das struct Global ist
-// 4. Eine Init-Funktion
-
-// Fragen an Betreuer:
-// 1. Socket Server testing: Wie geht das einfach & schnell?
-// 2. Aufgaben Punktesystem: bei bestehen 50 Punkte oder ist das maximal Punktzahl für die beste Lösung?
-
-
-int get(int key, char *resp) {
-    *resp = (char) "";
-
+int get(char key[], char resp[]) {
+    strcpy(resp, "");
     for (int i = 0; i < STORELENGTH; i++) {
-        if (kv[i].key == key) {
-            *resp = (char) kv[i].value;
+        if (strcmp(kv[i].key, key) == 0 ) {
+            strcpy(resp, kv[i].value);
             return 1;
         }
     }
-    *resp = (char) "Error: Key not found.";
+    strcpy(resp, "Error: Get was not successfull.");
     return -1;
 }
 
 
-int put(int key, char *value, char *resp){
+int put(char key[], char value[], char resp[]){
     int emptyIndex = -1;
-    //strcpy(resp, "");
-    resp = "";
+    strcpy(resp, "");
     for(int i = 0; i < STORELENGTH; i++){
         // Falls der Key existiert: Ueberschreiben, alten Wert zurueckgeben und return true
-        if(kv[i].key == key) {
-            resp = kv[i].value;
-            kv[i].value = value;
+        if(strcmp(kv[i].key, key) == 0) {
+            strcpy(resp, kv[i].value);
+            strcpy(kv[i].value, value);
             return 1;
         }
         // Einen leeren Index aufheben, falls der Key nicht existiert
-        if(kv[i].key == NULL){
             emptyIndex = i;
-        }
     }
 
     // Wenn es einen leeren Index gab, dort rein speichern.
     if(emptyIndex > -1) {
-        kv[emptyIndex].key = key;
-        resp = "";
-        kv[emptyIndex].value = value;
+        strcpy(kv[emptyIndex].key, key);
+        strcpy(resp, "");
+        strcpy(kv[emptyIndex].value, value);
         return 1;
     }
-
-    *resp = (char) "Error: Put was not successful.";
+    strcpy(resp, "Error: Put was not successful.");
     return -1;
 }
 
 
-int delete(int key, char *resp){
-    *resp = (char) "";
+int delete(char key[], char resp[]){
+    strcpy(resp, "");
     for (int i = 0; i < STORELENGTH; i++){
-        if (kv[i].key == key){
-            *resp = (char) kv[i].value;
-            kv[i].value = NULL;
-            kv[i].key = NULL;
-            return 1;
+        if (strcmp(kv[i].key, key) == 0){
+            strcpy(resp, kv[i].value);
+            strcpy(kv[i].value, "");
+            strcpy(kv[i].key, "");
+            return 0;
         }
     }
 
-    *resp = (char) "Error: Key not found.";
+    strcpy(resp, "Error: Key not found.");
     return -1;
 }
 
-int strtrenn(char *in, char *in_splitted[]){
-    int i=0;
-    in_splitted[0]= strtok(in, " ");
-    while(in_splitted[i++] && i<3)
-        in_splitted[i] = strtok(NULL, " ");
-    return i;
-}
+
 
 

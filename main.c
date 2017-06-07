@@ -8,21 +8,23 @@ int main() {
     shmem();
 
 
-    char *resp = "";
-    //char resp[BUFSIZ];
+    //char *resp = "";
+    char resp[BUFSIZ];
 
 
-    /* TESTDATEN
-    put(4, "depp", (char *) &resp);
+    /*TESTDATEN
+
+
+    put(4, "lol", resp);
     printf("PUT return: %s\n", resp);
 
-    get(4, (char *) &resp);
+    delete(4, resp);
+    printf("DEL return: %s\n", resp);
+
+    get(4, resp);
     printf("GET return: %s\n", resp);
-
-    put(4, "lol", (char *) &resp);
-    printf("PUT return: %s\n", resp);
-    */
     //Socket anlegen
+     */
     start();
 
     return 0;

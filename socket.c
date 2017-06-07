@@ -21,8 +21,8 @@ int start(){
     //char in[BUFSIZ]; // Daten vom Client an den Server
     //char out[BUFSIZ]; // Daten vom Server an den Client
     char *in_splitted[3]; //Kommando bei 0, key bei 1, value bei 2
-    char *resp = "";
-    //char resp[BUFSIZ];
+    //char *resp = "";
+    char resp[BUFSIZ];
 
 
     printf("Starting cKey-Server...\n");
@@ -103,10 +103,9 @@ int start(){
                     // Prüfen ob der key Parameter existiert
                     if (in_splitted[1] != NULL) {
 
-                        get(4, (char *) &resp);
-                        printf("Ausgabe: %s\n", resp);
+                        get(in_splitted[1], resp);
 
-                        strcpy(out, "cKey-Action: get\n");
+                        strcpy(out, strcat("cKey-Action: get\n",resp));
                     } else {
                         strcpy(out, "Err on get: No key submitted\n");
                     }
@@ -115,8 +114,8 @@ int start(){
                         // Prüfen ob ein value übergeben wurde
                         if (in_splitted[2] != NULL) {
 
-                            // HIER PUT FUNKTION AUFRUFEN
-                            put(4, "wer", (char *) &resp);
+                            put(in_splitted[1], in_splitted[2], resp);
+                            //put(23, "wert", resp);
                             printf("Alt: %s\n", resp);
 
                             strcpy(out, "cKey-Action: put\n");
@@ -130,8 +129,10 @@ int start(){
                     if (in_splitted[1] != NULL) {
 
                         // HIER DELETE FUNKTION AUFRUFEN
-
+                        delete(in_splitted[1], resp);
+                        printf("del: %s\n", resp);
                         strcpy(out, "cKey-Action: delete\n");
+
                     } else {
                         strcpy(out, "Err on delete: No key submitted\n");
                     }
