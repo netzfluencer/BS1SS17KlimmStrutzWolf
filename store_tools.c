@@ -5,11 +5,13 @@ int get(char key[], char resp[]) {
     strcpy(resp, "");
     for (int i = 0; i < STORELENGTH; i++) {
         if (strcmp(kv[i].key, key) == 0 ) {
-            strcpy(resp, kv[i].value);
+            strcpy(resp, "Der gesuchte Value ist '");
+            strcat(resp, kv[i].value);
+            strcat(resp, "'.\n");
             return 1;
         }
     }
-    strcpy(resp, "Error: Get was not successfull.");
+    strcpy(resp, "Error on get: Key not found.\n");
     return -1;
 }
 
@@ -20,7 +22,16 @@ int put(char key[], char value[], char resp[]){
     for(int i = 0; i < STORELENGTH; i++){
         // Falls der Key existiert: Ueberschreiben, alten Wert zurueckgeben und return true
         if(strcmp(kv[i].key, key) == 0) {
-            strcpy(resp, kv[i].value);
+            //Clientausgabe
+            strcpy(resp, "Beim Key '");
+            strcat(resp, kv[i].key);
+            strcat(resp, "' wird der Value '");
+            strcat(resp, kv[i].value);
+            strcat(resp, "' mit dem Value '");
+            strcat(resp, value);
+            strcat(resp, "' überschrieben.\n");
+
+
             strcpy(kv[i].value, value);
             return 1;
         }
@@ -31,11 +42,17 @@ int put(char key[], char value[], char resp[]){
     // Wenn es einen leeren Index gab, dort rein speichern.
     if(emptyIndex > -1) {
         strcpy(kv[emptyIndex].key, key);
-        strcpy(resp, "");
         strcpy(kv[emptyIndex].value, value);
+
+        //Clientausgabe
+        strcpy(resp, "Der Key '");
+        strcat(resp, key);
+        strcat(resp, "' mit dem Value '");
+        strcat(resp, value);
+        strcat(resp, "' wird eingefügt.\n");
         return 1;
     }
-    strcpy(resp, "Error: Put was not successful.");
+    strcpy(resp, "Error on put: Action not successfull\n");
     return -1;
 }
 
@@ -44,14 +61,20 @@ int delete(char key[], char resp[]){
     strcpy(resp, "");
     for (int i = 0; i < STORELENGTH; i++){
         if (strcmp(kv[i].key, key) == 0){
-            strcpy(resp, kv[i].value);
+            //Clientausgabe
+            strcpy(resp, "Der Key '");
+            strcat(resp, kv[i].key);
+            strcat(resp, "' mit dem Value '");
+            strcat(resp, kv[i].value);
+            strcat(resp, "' wird gelöscht.\n");
+
             strcpy(kv[i].value, "");
             strcpy(kv[i].key, "");
             return 0;
         }
     }
 
-    strcpy(resp, "Error: Key not found.");
+    strcpy(resp, "Error on delete: Key not found.\n");
     return -1;
 }
 

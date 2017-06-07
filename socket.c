@@ -105,7 +105,8 @@ int start(){
 
                         get(in_splitted[1], resp);
 
-                        strcpy(out, strcat("cKey-Action: get\n",resp));
+                        char strget[BUFSIZ] = "cKey-Action: get\n";
+                        strcpy(out, strcat(strget, resp));
                     } else {
                         strcpy(out, "Err on get: No key submitted\n");
                     }
@@ -115,10 +116,9 @@ int start(){
                         if (in_splitted[2] != NULL) {
 
                             put(in_splitted[1], in_splitted[2], resp);
-                            //put(23, "wert", resp);
-                            printf("Alt: %s\n", resp);
 
-                            strcpy(out, "cKey-Action: put\n");
+                            char strput[BUFSIZ] = "cKey-Action: put\n";
+                            strcpy(out, strcat(strput, resp));
                         } else {
                             strcpy(out, "Err on put: No Value submitted\n");
                         }
@@ -128,10 +128,10 @@ int start(){
                 } else if (strcmp(in_splitted[0], "delete") == 0) {
                     if (in_splitted[1] != NULL) {
 
-                        // HIER DELETE FUNKTION AUFRUFEN
                         delete(in_splitted[1], resp);
-                        printf("del: %s\n", resp);
-                        strcpy(out, "cKey-Action: delete\n");
+
+                        char strdel[BUFSIZ] = "cKey-Action: delete\n";
+                        strcpy(out, strcat(strdel, resp));
 
                     } else {
                         strcpy(out, "Err on delete: No key submitted\n");
