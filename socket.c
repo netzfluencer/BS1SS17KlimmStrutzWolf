@@ -1,17 +1,25 @@
 #include "socket.h"
 
 int strtoken(char *str, char *separator, char **token, int size) {
-    int i=0;
+    int i = 0;
     token[0] = strtok(str, separator);
-    while(token[i++] && i < size)
+    while (token[i++] && i < size)
         token[i] = strtok(NULL, separator);
     return (i);
 }
 
-int start(){
+int start() {
     /* Variablen für den Server */
-    int sock;
+    int sock, sem_id;
     int run = 1;
+    unsigned short marker[1];
+    sem_id = semget(IPC_PRIVATE, 1, IPC_CREAT | 0644);
+    if (sem_id == -1) {
+        printf("Die Gruppe konnte nicht angelegt werden!\n");
+        exit(1);
+    }
+    marker[0] = 1;
+    semctl(sem_id, 1, SETALL, marker);
 
     struct sockaddr_in server;
     struct sockaddr_in client;
@@ -34,8 +42,7 @@ int start(){
     if (sock < 0) {
         perror("creating stream socket");
         exit(1);
-    }
-    else {
+    } else {
         printf("Socket created.\n");
     }
 
@@ -48,20 +55,18 @@ int start(){
     server.sin_addr.s_addr = htonl(INADDR_ANY);
     server.sin_port = htons(1996);
 
-    if(bind( sock, (struct sockaddr *) &server, sizeof(server))<0){
+    if (bind(sock, (struct sockaddr *) &server, sizeof(server)) < 0) {
         perror("Error on binding");
-    }
-    else {
+    } else {
         printf("Socket binded.\n");
     }
 
 
 
     /* Auf Verbindung hören */
-    if(listen(sock, 5)<0){
+    if (listen(sock, 5) < 0) {
         perror("Error on listening");
-    }
-    else {
+    } else {
         printf("Listening...\n");
     }
 
@@ -71,96 +76,113 @@ int start(){
     socklen_t client_len;
     client_len = sizeof(client);
 
-    while(1) {
+    while (1) {
         fileDescriptor = accept(sock, (struct sockaddr *) &client, &client_len);
         int pid = fork();
-        if (pid < 0){
+        if (pid < 0) {
             perror("Error on fork");
             exit(1);
         }
-        if (pid == 0){
+        if (pid == 0) {
 
-        printf("Connection!\n");
-        while(run == 1) {
-            bzero(in,2000);
-            read(fileDescriptor, in, 2000);
-            // Daten vom Socket ==> in
+            struct sembuf enter, leave; //structs für up und down
+            enter.sem_num, leave.sem_num = 0;
+            enter.sem_flg, leave.sem_flg = SEM_UNDO;
+            enter.sem_op = -1; //blockieren, DOWN
+            leave.sem_op = 1; //freigeben, UP
+
+            printf("Connection!\n");
+            while (run == 1) {
+                bzero(in, 2000);
+                read(fileDescriptor, in, 2000);
+                // Daten vom Socket ==> in
 
 
 
-            // Loeschen des "ENTER"s & des "Carriage Return" (letzte zwei Zeichen)
-            in[strlen(in) - 1] = 0;
-            in[strlen(in) - 1] = 0;
+                // Loeschen des "ENTER"s & des "Carriage Return" (letzte zwei Zeichen)
+                in[strlen(in) - 1] = 0;
+                in[strlen(in) - 1] = 0;
 
 
-            // Check: Keine leere Eingabe
-            if (strlen(in) > 0) {
+                // Check: Keine leere Eingabe
+                if (strlen(in) > 0) {
 
-                // Splitting von Cmd, Key, Value
-                strtoken(in, " ", in_splitted, 3);
+                    // Splitting von Cmd, Key, Value
+                    strtoken(in, " ", in_splitted, 3);
 
-                if (strcmp(in_splitted[0], "get") == 0) {
-                    // Prüfen ob der key Parameter existiert
-                    if (in_splitted[1] != NULL) {
+                    if (strcmp(in_splitted[0], "get") == 0) {
+                        // Prüfen ob der key Parameter existiert
+                        if (in_splitted[1] != NULL) {
 
-                        get(in_splitted[1], resp);
+                            semop(sem_id, &enter, 1); //In den krit. Bereich
 
-                        char strget[BUFSIZ] = "cKey-Action: get\n";
-                        strcpy(out, strcat(strget, resp));
-                    } else {
-                        strcpy(out, "Err on get: No key submitted\n");
-                    }
-                } else if (strcmp(in_splitted[0], "put") == 0) {
-                    if (in_splitted[1] != NULL) {
-                        // Prüfen ob ein value übergeben wurde
-                        if (in_splitted[2] != NULL) {
+                            get(in_splitted[1], resp);
 
-                            put(in_splitted[1], in_splitted[2], resp);
+                            semop(sem_id, &leave, 1); //Aus dem krit. Bereich
 
-                            char strput[BUFSIZ] = "cKey-Action: put\n";
-                            strcpy(out, strcat(strput, resp));
+                            char strget[BUFSIZ] = "cKey-Action: get\n";
+                            strcpy(out, strcat(strget, resp));
                         } else {
-                            strcpy(out, "Err on put: No Value submitted\n");
+                            strcpy(out, "Err on get: No key submitted\n");
                         }
+                    } else if (strcmp(in_splitted[0], "put") == 0) {
+                        if (in_splitted[1] != NULL) {
+                            // Prüfen ob ein value übergeben wurde
+                            if (in_splitted[2] != NULL) {
+
+                                semop(sem_id, &enter, 1); //In den krit. Bereich
+
+                                put(in_splitted[1], in_splitted[2], resp);
+
+                                semop(sem_id, &leave, 1); //Aus dem krit. Bereich
+
+                                char strput[BUFSIZ] = "cKey-Action: put\n";
+                                strcpy(out, strcat(strput, resp));
+                            } else {
+                                strcpy(out, "Err on put: No Value submitted\n");
+                            }
+                        } else {
+                            strcpy(out, "Err on put: No key submitted\n");
+                        }
+                    } else if (strcmp(in_splitted[0], "delete") == 0) {
+                        if (in_splitted[1] != NULL) {
+
+                            semop(sem_id, &enter, 1); //In den krit. Bereich
+
+                            delete(in_splitted[1], resp);
+                            //sleep(10); Zum testen und angeben
+                            semop(sem_id, &leave, 1); //Aus dem krit. Bereich
+
+                            char strdel[BUFSIZ] = "cKey-Action: delete\n";
+                            strcpy(out, strcat(strdel, resp));
+
+                        } else {
+                            strcpy(out, "Err on delete: No key submitted\n");
+                        }
+                    } else if (strcmp(in_splitted[0], "exit") == 0) {
+                        run = -1;
                     } else {
-                        strcpy(out, "Err on put: No key submitted\n");
+                        strcpy(out, "Err: Unknown command\n");
                     }
-                } else if (strcmp(in_splitted[0], "delete") == 0) {
-                    if (in_splitted[1] != NULL) {
 
-                        delete(in_splitted[1], resp);
-
-                        char strdel[BUFSIZ] = "cKey-Action: delete\n";
-                        strcpy(out, strcat(strdel, resp));
-
-                    } else {
-                        strcpy(out, "Err on delete: No key submitted\n");
-                    }
-                } else if (strcmp(in_splitted[0], "exit") == 0) {
-                    run = -1;
-                } else {
-                    strcpy(out, "Err: Unknown command\n");
+                    // "in_splitted" chars wieder loeschen und frei machen
+                    memset(in_splitted[0], 0, strlen(in_splitted[0]));
+                    if (in_splitted[1] != NULL) memset(in_splitted[1], 0, strlen(in_splitted[1]));
+                    if (in_splitted[2] != NULL) memset(in_splitted[2], 0, strlen(in_splitted[2]));
                 }
 
-                // "in_splitted" chars wieder loeschen und frei machen
-                memset(in_splitted[0], 0, strlen(in_splitted[0]));
-                if (in_splitted[1] != NULL) memset(in_splitted[1], 0, strlen(in_splitted[1]));
-                if (in_splitted[2] != NULL) memset(in_splitted[2], 0, strlen(in_splitted[2]));
+
+                write(fileDescriptor, out, strlen(out)); // Daten vom Array out ==> Socket
+
+                // "in" und "out" chars wieder loeschen und frei machen
+                memset(in, 0, strlen(in));
+                memset(out, 0, strlen(out));
+
             }
+            close(fileDescriptor);
+        } else close(fileDescriptor);
 
-
-
-
-            write(fileDescriptor, out, strlen(out)); // Daten vom Array out ==> Socket
-
-            // "in" und "out" chars wieder loeschen und frei machen
-            memset(in,0,strlen(in));
-            memset(out,0,strlen(out));
-
-        }
-        close(fileDescriptor);
-    } else close(fileDescriptor);
-
-} return 0;
+    }
+    return 0;
 }
 
