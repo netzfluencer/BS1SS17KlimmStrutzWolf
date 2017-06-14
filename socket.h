@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <memory.h>
 #include "store_tools.h"
+#include <sys/sem.h>
 
 int start();
 int pid;

@@ -10,6 +10,7 @@
 #include <sys/types.h>
 #include <stdio.h>
 #include "store_tools.h"
+#include <sys/sem.h>
 
 struct key_value *kv;
 

@@ -10,7 +10,6 @@ int shmem() {
         kv = (struct key_value *) shmat(shID, 0, 0);
         for(int i= 0; i < STORELENGTH; i++) {
             kv[i] = kv_init[i];
-            //printf("%s\n", kv[i].value);
         }
 
     }
