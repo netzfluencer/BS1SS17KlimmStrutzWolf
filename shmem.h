@@ -13,6 +13,7 @@
 #include <sys/sem.h>
 
 struct key_value *kv;
+int *rc;
 
 int shmem();
 

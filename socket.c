@@ -10,9 +10,9 @@ int strtoken(char *str, char *separator, char **token, int size) {
 
 int start() {
     /* Variablen für den Server */
-    int sock, sem_id;
+    int sock, sem_id, mutex, runput, rundel;
     int run = 1;
-    unsigned short marker[1];
+    unsigned short marker[1], markerM[1];
     sem_id = semget(IPC_PRIVATE, 1, IPC_CREAT | 0644);
     if (sem_id == -1) {
         printf("Die Gruppe konnte nicht angelegt werden!\n");
@@ -20,6 +20,14 @@ int start() {
     }
     marker[0] = 1;
     semctl(sem_id, 1, SETALL, marker);
+
+    mutex = semget(IPC_PRIVATE, 1, IPC_CREAT | 0644);
+    if (mutex == -1) {
+        printf("Die Gruppe konnte nicht angelegt werden!\n");
+        exit(1);
+    }
+    markerM[0] = 1;
+    semctl(mutex, 0, SETALL, markerM);
 
     struct sockaddr_in server;
     struct sockaddr_in client;
@@ -90,7 +98,6 @@ int start() {
             enter.sem_flg, leave.sem_flg = SEM_UNDO;
             enter.sem_op = -1; //blockieren, DOWN
             leave.sem_op = 1; //freigeben, UP
-
             printf("Connection!\n");
             while (run == 1) {
                 bzero(in, 2000);
@@ -113,12 +120,21 @@ int start() {
                     if (strcmp(in_splitted[0], "get") == 0) {
                         // Prüfen ob der key Parameter existiert
                         if (in_splitted[1] != NULL) {
-
-                            semop(sem_id, &enter, 1); //In den krit. Bereich
-
+                            semop(mutex, &enter, 1);
+                            *rc = *rc + 1;
+                            if(*rc == 1) {
+                                semop(sem_id, &enter, 1); //In den krit. Bereich
+                            }
+                            //printf("Einer da\n"); Tester
+                            semop(mutex, &leave, 1);
+                            //sleep(10); tester für raceconditions
                             get(in_splitted[1], resp);
-
-                            semop(sem_id, &leave, 1); //Aus dem krit. Bereich
+                            semop(mutex, &enter, 1);
+                            *rc = *rc - 1;
+                            if (*rc == 0){
+                                semop(sem_id, &leave, 1);
+                            }
+                            semop(mutex, &leave, 1);
 
                             char strget[BUFSIZ] = "cKey-Action: get\n";
                             strcpy(out, strcat(strget, resp));
@@ -129,8 +145,16 @@ int start() {
                         if (in_splitted[1] != NULL) {
                             // Prüfen ob ein value übergeben wurde
                             if (in_splitted[2] != NULL) {
+                                runput = 0;
+                                while(runput == 0){
+                                semop(mutex, &enter, 1); //In den krit. bereich LeserSchreiber
+                                if(*rc == 0) {
+                                    semop(sem_id, &enter, 1); //In den krit. Bereich
+                                    runput = -1;
+                                }
+                                semop(mutex, &leave, 1); //Aus dem dem krit. Bereich LeserSchreiber
 
-                                semop(sem_id, &enter, 1); //In den krit. Bereich
+                                }
 
                                 put(in_splitted[1], in_splitted[2], resp);
 
@@ -146,8 +170,16 @@ int start() {
                         }
                     } else if (strcmp(in_splitted[0], "delete") == 0) {
                         if (in_splitted[1] != NULL) {
+                            rundel = 0;
+                            while(rundel == 0){
+                                semop(mutex, &enter, 1);
+                                if(*rc == 0) {
+                                    semop(sem_id, &enter, 1); //In den krit. Bereich
+                                    rundel = -1;
+                                }
+                                semop(mutex, &leave, 1);
 
-                            semop(sem_id, &enter, 1); //In den krit. Bereich
+                            }
 
                             delete(in_splitted[1], resp);
                             //sleep(10); Zum testen und angeben
