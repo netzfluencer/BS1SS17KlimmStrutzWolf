@@ -192,7 +192,7 @@ int start() {
                             strcpy(out, "Err on delete: No key submitted\n");
                         }
                     } else if (strcmp(in_splitted[0], "exit") == 0) {
-                        run = -1;
+                        exit(1);
                     } else {
                         strcpy(out, "Err: Unknown command\n");
                     }
