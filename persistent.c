@@ -6,16 +6,17 @@
 #include "socket.h"
 
 FILE *dataFile;
+int c;
 
 
 
 
-void auslesen(char key[], char resp[]){
+void auslesen(char resp[]){
     //opens file in mode r for read
     dataFile = fopen("data.txt", "r");
-    while(fscanf(dataFile, "%s %s", key, resp) > 0){
+    while(c =getc(dataFile) != EOF){
         //output data in a useful way
-        strcat(resp, );
+        strcat(resp, c);
         fclose(dataFile);
     }
 

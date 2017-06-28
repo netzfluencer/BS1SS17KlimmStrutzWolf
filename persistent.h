@@ -8,6 +8,7 @@
 #include "store_tools.h"
 
 
-void auslesen();
+void auslesen(char []);
+void schreiben(char [], char []);
 
 #endif //BS1SS17KLIMMSTRUTZWOLF_PERSISTENT_H
