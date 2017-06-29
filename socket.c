@@ -1,4 +1,5 @@
 #include "socket.h"
+#include "persistent.h"
 
 int strtoken(char *str, char *separator, char **token, int size) {
     int i = 0;
@@ -69,6 +70,14 @@ int start() {
         printf("Socket binded.\n");
     }
 
+    //Nach logfile suchen
+    if(sucheLog() == 0){
+        auslesen("");
+        printf("Database found\n");
+    } else {
+        printf("Database not found\n");
+        neuErstellen();
+    }
 
 
     /* Auf Verbindung hören */

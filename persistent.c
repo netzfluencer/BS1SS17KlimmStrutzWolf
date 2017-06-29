@@ -8,13 +8,19 @@
 FILE *dataFile;
 int c;
 
+int sucheLog() {
+    if ((dataFile = fopen("keyvalue.txt", "r")) == NULL) {
+        return -1;
+    }
+    else {
+        return 0;
+    }
+}
 
-
-
-void auslesen(char resp[]){
+void auslesen(char resp[]) {
     //opens file in mode r for read
-    dataFile = fopen("data.txt", "r");
-    while(c =getc(dataFile) != EOF){
+    dataFile = fopen("keyvalue.txt", "r");
+    while (c == getc(dataFile) != EOF) {
         //output data in a useful way
         strcat(resp, c);
         fclose(dataFile);
@@ -22,7 +28,11 @@ void auslesen(char resp[]){
 
 }
 
-void schreiben(char key[], char resp[]){
+void schreiben(char key[], char resp[]) {
     dataFile = fopen("data.txt", "w");
     fprintf(dataFile, "%s %s\n", key, resp);
+}
+
+void neuErstellen() {
+
 }
