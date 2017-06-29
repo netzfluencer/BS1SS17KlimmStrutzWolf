@@ -71,14 +71,7 @@ int start() {
     }
 
     //Nach logfile suchen
-    if(sucheLog() == 0){
-        auslesen("");
-        printf("Database found\n");
-    } else {
-        printf("Database not found\n");
-        neuErstellen();
-    }
-
+    auslesen(resp);
 
     /* Auf Verbindung hören */
     if (listen(sock, 5) < 0) {

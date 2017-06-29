@@ -8,31 +8,26 @@
 FILE *dataFile;
 int c;
 
-int sucheLog() {
-    if ((dataFile = fopen("keyvalue.txt", "r")) == NULL) {
-        return -1;
-    }
-    else {
-        return 0;
-    }
-}
-
 void auslesen(char resp[]) {
     //opens file in mode r for read
-    dataFile = fopen("keyvalue.txt", "r");
-    while (c == getc(dataFile) != EOF) {
-        //output data in a useful way
-        strcat(resp, c);
+    if(fopen("keyvalue.txt", "r") != NULL) {
+        printf("Database found.\n");
+        dataFile = fopen("keyvalue.txt", "r");
+        while (c == getc(dataFile) != EOF) {
+            //output data in a useful way
+            strcat(resp, c);
+            fclose(dataFile);
+        }
+    }
+    else{
+        printf("Database not found, creating new one\n");
+        dataFile = fopen("keyvalue.txt", "w");
         fclose(dataFile);
     }
 
 }
 
 void schreiben(char key[], char resp[]) {
-    dataFile = fopen("data.txt", "w");
+    dataFile = fopen("keyvalue.txt", "w");
     fprintf(dataFile, "%s %s\n", key, resp);
-}
-
-void neuErstellen() {
-
 }
