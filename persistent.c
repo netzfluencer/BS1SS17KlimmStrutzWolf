@@ -7,20 +7,24 @@
 
 FILE *dataFile;
 int c;
+char temp[BUFSIZ];
 
 void auslesen(char resp[]) {
     //opens file in mode r for read
-    if(fopen("keyvalue.txt", "r") != NULL) {
+
+    dataFile = fopen("keyvalue.txt", "r");
+    if(dataFile != NULL) {
         printf("Database found.\n");
-        dataFile = fopen("keyvalue.txt", "r");
-        while (c == getc(dataFile) != EOF) {
-            //output data in a useful way
-            strcat(resp, c);
-            fclose(dataFile);
+        while ((c = fgetc(dataFile)) != EOF) {
+            printf("%d\n", c);
+            strcat(temp, ""+c);
+            printf("%s\n", temp);
         }
+        fclose(dataFile);
     }
     else{
         printf("Database not found, creating new one\n");
+        fclose(dataFile);
         dataFile = fopen("keyvalue.txt", "w");
         fclose(dataFile);
     }
