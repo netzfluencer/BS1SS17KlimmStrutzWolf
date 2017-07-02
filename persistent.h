@@ -10,6 +10,7 @@
 
 void auslesen(char []);
 void schreiben(char []);
+void rausloeschen(char *, char *, char *);
 void neuErstellen();
 int sucheLog();
 
