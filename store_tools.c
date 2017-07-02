@@ -90,12 +90,18 @@ int fillStore(char resp[]) {
             break;
         }
             while (resp[respIT] != NULL && resp[respIT] != 32) {
-                strcat(tmpkey, ""+resp[respIT]);
+                char tmppush[2];
+                tmppush[0] = resp[respIT];
+                tmppush[1] = '\0';
+                strcat(tmpkey, tmppush);
                 respIT++;
         }
             respIT++;
             while (resp[respIT] != 32 && resp[respIT] != NULL) {
-                strcat(tmpval, ""+resp[respIT]);
+                char tmppush2 [2];
+                tmppush2[0] = resp[respIT];
+                tmppush2[1] = '\0';
+                strcat(tmpval, tmppush2);
                 respIT++;
             }
             respIT++;
