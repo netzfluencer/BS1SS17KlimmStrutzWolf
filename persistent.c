@@ -7,7 +7,6 @@
 
 FILE *dataFile;
 int c;
-char temp[BUFSIZ];
 
 void auslesen(char resp[]) {
     //opens file in mode r for read
@@ -15,10 +14,12 @@ void auslesen(char resp[]) {
     dataFile = fopen("keyvalue.txt", "r");
     if(dataFile != NULL) {
         printf("Database found.\n");
+        int ivall = 0;
         while ((c = fgetc(dataFile)) != EOF) {
-            printf("%d\n", c);
-            strcat(temp, ""+c);
-            printf("%s\n", temp);
+            char tmp = c;
+            resp[ivall] = tmp;
+            printf("%s\n", resp);
+            ivall++;
         }
         fclose(dataFile);
     }
