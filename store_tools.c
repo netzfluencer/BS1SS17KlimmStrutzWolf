@@ -82,23 +82,26 @@ int delete(char key[], char resp[]) {
 
 int fillStore(char resp[]) {
     int respIT = 0;
+    char tmpkey[BUFSIZ];
+    char tmpval[BUFSIZ];
+    char tempresp[BUFSIZ];
     while (true) {
         if(resp[respIT] == NULL){
             break;
         }
             while (resp[respIT] != NULL && resp[respIT] != 32) {
-                printf("\nKey: %c", resp[respIT]);
-                //strcpy(kv[respIT].key, resp[respIT]);
+                strcat(tmpkey, ""+resp[respIT]);
                 respIT++;
         }
             respIT++;
             while (resp[respIT] != 32 && resp[respIT] != NULL) {
-                printf("\nValue: %c", resp[respIT]);
-                //strcpy(kv[respIT].value, ""+resp[respIT]);
+                strcat(tmpval, ""+resp[respIT]);
                 respIT++;
             }
             respIT++;
-
+            put(tmpkey, tmpval, tempresp);
+            bzero(tmpkey, sizeof(tmpkey));
+            bzero(tmpval, sizeof(tmpval));
     }
 }
 
