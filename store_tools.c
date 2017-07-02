@@ -37,7 +37,10 @@ int put(char key[], char value[], char resp[]) {
             return 1;
         }
         // Einen leeren Index aufheben, falls der Key nicht existiert
+        if(strcmp(kv[i].key,"") == 0){
         emptyIndex = i;
+        }
+
     }
 
     // Wenn es einen leeren Index gab, dort rein speichern.
