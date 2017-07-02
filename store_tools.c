@@ -5,7 +5,7 @@
 int get(char key[], char resp[]) {
     strcpy(resp, "");
     for (int i = 0; i < STORELENGTH; i++) {
-        if (strcmp(kv[i].key, key) == 0 ) {
+        if (strcmp(kv[i].key, key) == 0) {
             strcpy(resp, "Der gesuchte Value ist '");
             strcat(resp, kv[i].value);
             strcat(resp, "'.\n");
@@ -17,12 +17,12 @@ int get(char key[], char resp[]) {
 }
 
 
-int put(char key[], char value[], char resp[]){
+int put(char key[], char value[], char resp[]) {
     int emptyIndex = -1;
     strcpy(resp, "");
-    for(int i = 0; i < STORELENGTH; i++){
+    for (int i = 0; i < STORELENGTH; i++) {
         // Falls der Key existiert: Ueberschreiben, alten Wert zurueckgeben und return true
-        if(strcmp(kv[i].key, key) == 0) {
+        if (strcmp(kv[i].key, key) == 0) {
             //Clientausgabe
             strcpy(resp, "Beim Key '");
             strcat(resp, kv[i].key);
@@ -37,11 +37,11 @@ int put(char key[], char value[], char resp[]){
             return 1;
         }
         // Einen leeren Index aufheben, falls der Key nicht existiert
-            emptyIndex = i;
+        emptyIndex = i;
     }
 
     // Wenn es einen leeren Index gab, dort rein speichern.
-    if(emptyIndex > -1) {
+    if (emptyIndex > -1) {
         strcpy(kv[emptyIndex].key, key);
         strcpy(kv[emptyIndex].value, value);
 
@@ -58,10 +58,10 @@ int put(char key[], char value[], char resp[]){
 }
 
 
-int delete(char key[], char resp[]){
+int delete(char key[], char resp[]) {
     strcpy(resp, "");
-    for (int i = 0; i < STORELENGTH; i++){
-        if (strcmp(kv[i].key, key) == 0){
+    for (int i = 0; i < STORELENGTH; i++) {
+        if (strcmp(kv[i].key, key) == 0) {
             //Clientausgabe
             strcpy(resp, "Der Key '");
             strcat(resp, kv[i].key);
@@ -80,10 +80,25 @@ int delete(char key[], char resp[]){
 }
 
 
-int fillStore(char resp[]){
-    //TODO: Store mit Daten aus resp füllen
-    while (true){
-        break;
+int fillStore(char resp[]) {
+    int respIT = 0;
+    while (true) {
+        if(resp[respIT] == NULL){
+            break;
+        }
+            while (resp[respIT] != NULL && resp[respIT] != 32) {
+                printf("\nKey: %c", resp[respIT]);
+                //strcpy(kv[respIT].key, resp[respIT]);
+                respIT++;
+        }
+            respIT++;
+            while (resp[respIT] != 32 && resp[respIT] != NULL) {
+                printf("\nValue: %c", resp[respIT]);
+                //strcpy(kv[respIT].value, resp[respIT]);
+                respIT++;
+            }
+            respIT++;
+
     }
 }
 
