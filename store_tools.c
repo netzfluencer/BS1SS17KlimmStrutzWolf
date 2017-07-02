@@ -41,6 +41,7 @@ int put(char key[], char value[], char resp[]) {
     }
 
     // Wenn es einen leeren Index gab, dort rein speichern.
+    //TODO: Abfrage, ob die Stelle an Emptyindex noch da ist!
     if (emptyIndex > -1) {
         strcpy(kv[emptyIndex].key, key);
         strcpy(kv[emptyIndex].value, value);
