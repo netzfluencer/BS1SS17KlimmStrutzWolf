@@ -9,7 +9,7 @@
 
 
 void auslesen(char []);
-void schreiben(char [], char []);
+void schreiben(char []);
 void neuErstellen();
 int sucheLog();
 

@@ -38,7 +38,7 @@ int start() {
     //char in[BUFSIZ]; // Daten vom Client an den Server
     //char out[BUFSIZ]; // Daten vom Server an den Client
     char *in_splitted[3]; //Kommando bei 0, key bei 1, value bei 2
-    //char *resp = "";
+    char saveresp[BUFSIZ];
     char resp[BUFSIZ];
 
 
@@ -71,10 +71,10 @@ int start() {
     }
 
     /* Nach persistenten Daten suchen */
-    auslesen(resp);
+    auslesen(saveresp);
 
     /* Store füllen mit Daten */
-    fillStore(resp);
+    fillStore(saveresp);
 
     /* Auf Verbindung hören */
     if (listen(sock, 5) < 0) {
@@ -82,8 +82,6 @@ int start() {
     } else {
         printf("Listening...\n");
     }
-
-
 
     /* Verbindung aktzeptieren */
     socklen_t client_len;
@@ -162,6 +160,18 @@ int start() {
                                 }
 
                                 put(in_splitted[1], in_splitted[2], resp);
+                                char splittemp[BUFSIZ];
+                                char spacetemp[2];
+                                spacetemp[0] = 32;
+                                spacetemp[1] = 0;
+                                strcat(splittemp, spacetemp);
+                                strcat(splittemp, in_splitted[1]);
+                                strcat(splittemp, spacetemp);
+                                strcat(splittemp, in_splitted[2]);
+                                strcat(saveresp,splittemp);
+                                printf("%s", saveresp);
+                                fflush(stdout);
+                                bzero(splittemp, sizeof(splittemp));
 
                                 semop(sem_id, &leave, 1); //Aus dem krit. Bereich
 
@@ -197,6 +207,7 @@ int start() {
                             strcpy(out, "Err on delete: No key submitted\n");
                         }
                     } else if (strcmp(in_splitted[0], "exit") == 0) {
+                        schreiben(saveresp);
                         exit(1);
                     } else {
                         strcpy(out, "Err: Unknown command\n");

@@ -32,7 +32,7 @@ void auslesen(char resp[]) {
 
 }
 
-void schreiben(char key[], char resp[]) {
+void schreiben(char resp[]) {
     dataFile = fopen("keyvalue.txt", "w");
-    fprintf(dataFile, "%s %s\n", key, resp);
+    fprintf(dataFile, "%s", resp);
 }
