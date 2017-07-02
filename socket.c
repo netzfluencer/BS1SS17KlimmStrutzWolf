@@ -70,8 +70,11 @@ int start() {
         printf("Socket binded.\n");
     }
 
-    //Nach logfile suchen
+    /* Nach persistenten Daten suchen */
     auslesen(resp);
+
+    /* Store füllen mit Daten */
+    fillStore(resp);
 
     /* Auf Verbindung hören */
     if (listen(sock, 5) < 0) {

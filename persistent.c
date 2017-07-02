@@ -18,9 +18,9 @@ void auslesen(char resp[]) {
         while ((c = fgetc(dataFile)) != EOF) {
             char tmp = c;
             resp[ivall] = tmp;
-            printf("%s\n", resp);
             ivall++;
         }
+        resp[ivall-1] = NULL;
         fclose(dataFile);
     }
     else{

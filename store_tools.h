@@ -15,7 +15,7 @@ struct key_value kv_init[STORELENGTH];
 int put(char key[], char value[], char resp[]);
 int get(char key[], char resp[]);
 int delete(char key[], char resp[]);
-int strtrenn(char *str, char *token[]);
+int fillStore(char resp[]);
 
 
 #endif //BS1SS17KLIMMSTRUTZWOLF_STORE_TOOLS_H

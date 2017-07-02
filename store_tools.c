@@ -1,4 +1,5 @@
 #include <string.h>
+#include <stdbool.h>
 #include "store_tools.h"
 
 int get(char key[], char resp[]) {
@@ -79,5 +80,10 @@ int delete(char key[], char resp[]){
 }
 
 
-
+int fillStore(char resp[]){
+    //TODO: Store mit Daten aus resp füllen
+    while (true){
+        break;
+    }
+}
 
