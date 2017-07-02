@@ -94,7 +94,7 @@ int fillStore(char resp[]) {
             respIT++;
             while (resp[respIT] != 32 && resp[respIT] != NULL) {
                 printf("\nValue: %c", resp[respIT]);
-                //strcpy(kv[respIT].value, resp[respIT]);
+                //strcpy(kv[respIT].value, ""+resp[respIT]);
                 respIT++;
             }
             respIT++;
