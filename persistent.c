@@ -31,10 +31,8 @@ void auslesen(char resp[]) {
 
 }
 
-void schreiben(char resp[]) {
+void schreiben() {
     dataFile = fopen("keyvalue.txt", "w");
-    fprintf(dataFile, "%s", resp);
+    fclose(dataFile);
 }
 
-void rausloeschen(char *key, char *value, char *resp) {
-}

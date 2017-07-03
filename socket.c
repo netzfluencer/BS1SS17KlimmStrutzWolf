@@ -160,18 +160,6 @@ int start() {
                                 }
 
                                 put(in_splitted[1], in_splitted[2], resp);
-                                char splittemp[BUFSIZ];
-                                char spacetemp[2];
-                                spacetemp[0] = 32;
-                                spacetemp[1] = 0;
-                                strcat(splittemp, spacetemp);
-                                strcat(splittemp, in_splitted[1]);
-                                strcat(splittemp, spacetemp);
-                                strcat(splittemp, in_splitted[2]);
-                                strcat(savefile,splittemp);
-                                printf("%s", savefile);
-                                fflush(stdout);
-                                bzero(splittemp, sizeof(splittemp));
 
                                 semop(sem_id, &leave, 1); //Aus dem krit. Bereich
 
@@ -198,8 +186,6 @@ int start() {
 
                             delete(in_splitted[1], resp);
 
-                            rausloeschen(in_splitted[1], in_splitted[2], savefile);
-
                             semop(sem_id, &leave, 1); //Aus dem krit. Bereich
 
                             char strdel[BUFSIZ] = "cKey-Action: delete\n";
@@ -209,7 +195,7 @@ int start() {
                             strcpy(out, "Err on delete: No key submitted\n");
                         }
                     } else if (strcmp(in_splitted[0], "exit") == 0) {
-                        schreiben(savefile);
+                        schreiben();
                         exit(1);
                     } else {
                         strcpy(out, "Err: Unknown command\n");

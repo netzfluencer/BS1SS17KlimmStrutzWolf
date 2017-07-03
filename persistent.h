@@ -9,9 +9,5 @@
 
 
 void auslesen(char []);
-void schreiben(char []);
-void rausloeschen(char *, char *, char *);
-void neuErstellen();
-int sucheLog();
-
+void schreiben();
 #endif //BS1SS17KLIMMSTRUTZWOLF_PERSISTENT_H
