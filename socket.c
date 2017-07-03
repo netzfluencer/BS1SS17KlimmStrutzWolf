@@ -196,7 +196,6 @@ int start() {
                         }
                     } else if (strcmp(in_splitted[0], "exit") == 0) {
                         schreiben();
-                        exit(1);
                     } else {
                         strcpy(out, "Err: Unknown command\n");
                     }

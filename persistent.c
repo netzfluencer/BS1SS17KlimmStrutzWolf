@@ -24,7 +24,7 @@ void auslesen(char resp[]) {
         fclose(dataFile);
     } else {
         printf("Database not found, creating new one\n");
-        fclose(dataFile);
+        //fclose(dataFile);
         dataFile = fopen("keyvalue.txt", "w");
         fclose(dataFile);
     }
@@ -33,6 +33,28 @@ void auslesen(char resp[]) {
 
 void schreiben() {
     dataFile = fopen("keyvalue.txt", "w");
+    char tempfile[BUFSIZ];
+    char tempcombinated[BUFSIZ];
+    char tempspace[2];
+    tempspace[0] = 32;
+    tempspace[1] = '\0';
+    for(int i = 0; i <= STORELENGTH; i++){
+        if(kv[i].key == NULL){
+
+        }
+        else{
+            strcat(tempcombinated, kv[i].key);
+            strcat(tempcombinated, tempspace);
+            strcat(tempcombinated, kv[i].value);
+            strcat(tempcombinated, tempspace);
+            strcat(tempfile, tempcombinated);
+            bzero(tempcombinated, sizeof(tempcombinated));
+        }
+    }
+    printf("%s", tempcombinated);
+    fflush(stdout);
+    fprintf(dataFile, "%s", tempfile);
     fclose(dataFile);
+    exit(1);
 }
 
