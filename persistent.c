@@ -32,9 +32,8 @@ void auslesen(char resp[]) {
 
 void schreiben() {
     dataFile = fopen("keyvalue.txt", "w+");
-    char *tempresp = " ";
-    for(int i = 0; i <= STORELENGTH; i++){
-        if(strcmp(kv[i].key, NULL) != 0){
+    for(int i = 0; i < STORELENGTH; i++){
+        if(strlen(kv[i].key) > 0){
             fprintf(dataFile, "%s\n%s\n", kv[i].key, kv[i].value);
         }
         else{
