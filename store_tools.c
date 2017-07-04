@@ -93,7 +93,7 @@ int fillStore(char resp[]) {
         if(resp[respIT] == NULL){
             break;
         }
-            while (resp[respIT] != NULL && resp[respIT] != 32) {
+            while (resp[respIT] != NULL && resp[respIT] != 10) {
                 char tmppush[2];
                 tmppush[0] = resp[respIT];
                 tmppush[1] = '\0';
@@ -101,7 +101,7 @@ int fillStore(char resp[]) {
                 respIT++;
         }
             respIT++;
-            while (resp[respIT] != 32 && resp[respIT] != NULL) {
+            while (resp[respIT] != 10 && resp[respIT] != NULL) {
                 char tmppush2 [2];
                 tmppush2[0] = resp[respIT];
                 tmppush2[1] = '\0';
