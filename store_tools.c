@@ -4,14 +4,35 @@
 
 int get(char key[], char resp[]) {
     strcpy(resp, "");
-    for (int i = 0; i < STORELENGTH; i++) {
-        if (strcmp(kv[i].key, key) == 0) {
-            strcpy(resp, "Der gesuchte Value ist '");
-            strcat(resp, kv[i].value);
-            strcat(resp, "'.\n");
-            return 1;
+
+
+    //WILDCARD CHECK
+    if(strchr(key, '*') && strchr(key, '?')) {
+        strcpy(resp, "Error on get: Do not combine ? and *.\n");
+        return -1;
+    }
+
+    else if (strchr(key, '*')) {
+        printf("String enthaelt ein *\n");
+    }
+
+    else if (strchr(key, '?')) {
+        printf("String enthaelt ein ?\n");
+    }
+
+    else {
+        for (int i = 0; i < STORELENGTH; i++) {
+            if (strcmp(kv[i].key, key) == 0) {
+                //strcpy(resp, "Der gesuchte Value ist '");
+                //strcat(resp, kv[i].value);
+                //strcat(resp, "'.\n");
+                strcpy(resp, kv[i].value);
+                strcat(resp, "\n");
+                return 1;
+            }
         }
     }
+
     strcpy(resp, "Error on get: Key not found.\n");
     return -1;
 }
@@ -114,4 +135,5 @@ int fillStore(char resp[]) {
             bzero(tmpval, sizeof(tmpval));
     }
 }
+
 

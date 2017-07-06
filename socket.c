@@ -118,7 +118,7 @@ int start() {
                 if (strlen(in) > 0) {
 
                     // Splitting von Cmd, Key, Value
-                    strtoken(in, " ", in_splitted, 3);
+                    strtoken(in, " ", in_splitted, BUFSIZ);
 
                     if (strcmp(in_splitted[0], "get") == 0) {
                         // Prüfen ob der key Parameter existiert
@@ -148,6 +148,31 @@ int start() {
                         if (in_splitted[1] != NULL) {
                             // Prüfen ob ein value übergeben wurde
                             if (in_splitted[2] != NULL) {
+                                char valueStr[80];
+                                // Check if value starts with " - Ascii 34
+                                if (in_splitted[2][0] == 34) {
+                                    in_splitted[2]++;
+                                    int counter = 2;
+                                    strcpy(valueStr, "");
+                                    while(counter > 0) {
+
+                                        if(in_splitted[counter][strlen(in_splitted[counter])-1] == 34) {
+                                            in_splitted[counter][strlen(in_splitted[counter])-1] = 0;
+                                            strcat(valueStr, in_splitted[counter]);
+                                            strcpy(in_splitted[2], valueStr);
+                                            counter = -1;
+                                        }
+
+                                        else {
+                                            strcat(valueStr, in_splitted[counter]);
+                                            strcat(valueStr, " ");
+                                            counter++;
+                                        }
+                                    }
+
+
+                                }
+
                                 runput = 0;
                                 while(runput == 0){
                                 semop(mutex, &enter, 1); //In den krit. bereich LeserSchreiber
