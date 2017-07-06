@@ -13,11 +13,45 @@ int get(char key[], char resp[]) {
     }
 
     else if (strchr(key, '*')) {
-        printf("String enthaelt ein *\n");
+        char results[BUFSIZ];
+
+        //Ascii Nummer für * = 42
+        if (key[0] == 42) {
+            key++;
+            printf("Substring: %s\n", key);
+
+            int substrLEN = strlen(key);
+
+            for (int i = STORELENGTH-1; i >= 0; i--) {
+                printf("Index %i: %s\n", i, kv[i].key);
+                int storestrLEN = strlen(kv[i].key);
+                if (storestrLEN >= substrLEN) {
+                    //printf("Index %i: %s\n", i, kv[i].key);
+                    for (int j = 1; j <= strlen(key); j++) {
+
+                        if (kv[i].key[storestrLEN-j] != key[substrLEN-j]) {
+                            break;
+                        }
+                        printf("%c\n", kv[i].key[storestrLEN-j]);
+
+                        //hinzufuegen zu results
+                        if(j == substrLEN) {
+                            printf("Result!\n");
+                            strcat(resp, kv[i].value);
+                            strcat(resp, "\n");
+                        }
+                    }
+                }
+            }
+        }
+
+
+        return 1;
     }
 
     else if (strchr(key, '?')) {
         printf("String enthaelt ein ?\n");
+        return 1;
     }
 
     else {
