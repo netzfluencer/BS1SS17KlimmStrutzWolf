@@ -86,13 +86,13 @@ int get(char key[], char resp[]) {
     }
 
     else if (strchr(key, '?')) {
-        printf("String enthaelt ein ?\n");
+        //printf("String enthaelt ein ?\n");
 
         //Ascii Nummer für ? = 63
         if (key[0] == 63) {
             key++;
             substrLEN = strlen(key);
-            printf("Substring: %s\n", key);
+            //printf("Substring: %s\n", key);
 
             for (int i = STORELENGTH-1; i >= 0; i--) {
                 //printf("Index %i: %s\n", i, kv[i].key);
