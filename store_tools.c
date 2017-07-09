@@ -3,6 +3,8 @@
 #include "store_tools.h"
 
 int get(char key[], char resp[]) {
+    int substrLEN = strlen(key);
+    char results[BUFSIZ];
     strcpy(resp, "");
 
 
@@ -13,32 +15,66 @@ int get(char key[], char resp[]) {
     }
 
     else if (strchr(key, '*')) {
-        char results[BUFSIZ];
 
         //Ascii Nummer für * = 42
         if (key[0] == 42) {
             key++;
-            printf("Substring: %s\n", key);
-
-            int substrLEN = strlen(key);
+            substrLEN = strlen(key);
+            //printf("Substring: %s\n", key);
 
             for (int i = STORELENGTH-1; i >= 0; i--) {
-                printf("Index %i: %s\n", i, kv[i].key);
+                //printf("Index %i: %s\n", i, kv[i].key);
                 int storestrLEN = strlen(kv[i].key);
-                if (storestrLEN >= substrLEN) {
-                    //printf("Index %i: %s\n", i, kv[i].key);
-                    for (int j = 1; j <= strlen(key); j++) {
+                if(substrLEN > 0) {
+                    if (storestrLEN >= substrLEN) {
+                        //printf("Index %i: %s\n", i, kv[i].key);
+                        for (int j = 1; j <= strlen(key); j++) {
 
-                        if (kv[i].key[storestrLEN-j] != key[substrLEN-j]) {
-                            break;
+                            if (kv[i].key[storestrLEN-j] != key[substrLEN-j]) {
+                                break;
+                            }
+                            //printf("%c\n", kv[i].key[storestrLEN-j]);
+
+                            //hinzufuegen zu results
+                            if(j == substrLEN) {
+                                strcat(resp, kv[i].value);
+                                strcat(resp, "\n");
+                            }
                         }
-                        printf("%c\n", kv[i].key[storestrLEN-j]);
+                    }
+                }
+                //um mit dem befehl "*" alles ausgeben zu lassen
+                else {
+                    if(strlen(kv[i].value)>0) {
+                        strcat(resp, kv[i].value);
+                        strcat(resp, "\n");
+                    }
+                }
+            }
+        }
 
-                        //hinzufuegen zu results
-                        if(j == substrLEN) {
-                            printf("Result!\n");
-                            strcat(resp, kv[i].value);
-                            strcat(resp, "\n");
+        else {
+            key[substrLEN-1] = 0;
+            substrLEN = strlen(key);
+            //printf("Substring: %s\n", key);
+
+            for (int i = STORELENGTH-1; i >= 0; i--) {
+
+                int storestrLEN = strlen(kv[i].key);
+                if(substrLEN > 0) {
+                    if (storestrLEN >= substrLEN) {
+                        for (int j = 0; j < strlen(key); j++) {
+
+                            if (kv[i].key[j] != key[j]) {
+                                break;
+                            }
+
+                            //hinzufuegen zu results
+                            if(j == substrLEN-1) {
+                                //printf("Index %i: %s\n", i, kv[i].key);
+                                strcat(resp, kv[i].value);
+                                strcat(resp, "\n");
+                            }
                         }
                     }
                 }
@@ -51,6 +87,73 @@ int get(char key[], char resp[]) {
 
     else if (strchr(key, '?')) {
         printf("String enthaelt ein ?\n");
+
+        //Ascii Nummer für ? = 63
+        if (key[0] == 63) {
+            key++;
+            substrLEN = strlen(key);
+            printf("Substring: %s\n", key);
+
+            for (int i = STORELENGTH-1; i >= 0; i--) {
+                //printf("Index %i: %s\n", i, kv[i].key);
+                int storestrLEN = strlen(kv[i].key);
+                if(substrLEN > 0) {
+                    if (storestrLEN == substrLEN+1) {
+                        //printf("Index %i: %s\n", i, kv[i].key);
+                        for (int j = 1; j <= strlen(key); j++) {
+
+                            if (kv[i].key[storestrLEN-j] != key[substrLEN-j]) {
+                                break;
+                            }
+                            //printf("%c\n", kv[i].key[storestrLEN-j]);
+
+                            //hinzufuegen zu results
+                            if(j == substrLEN) {
+                                strcat(resp, kv[i].value);
+                                strcat(resp, "\n");
+                            }
+                        }
+                    }
+                }
+                    //um mit dem befehl "?" alles ausgeben zu lassen
+                else {
+                    if(strlen(kv[i].value) > 0 && strlen(kv[i].key) == 1) {
+                        strcat(resp, kv[i].value);
+                        strcat(resp, "\n");
+                    }
+                }
+            }
+        }
+
+        else {
+            key[substrLEN-1] = 0;
+            substrLEN = strlen(key);
+            //printf("Substring: %s\n", key);
+
+            //HIER
+            for (int i = STORELENGTH-1; i >= 0; i--) {
+
+                int storestrLEN = strlen(kv[i].key);
+                if(substrLEN > 0) {
+                    if (storestrLEN == substrLEN+1) {
+                        for (int j = 0; j < strlen(key); j++) {
+
+                            if (kv[i].key[j] != key[j]) {
+                                break;
+                            }
+
+                            //hinzufuegen zu results
+                            if(j == substrLEN-1) {
+                                //printf("Index %i: %s\n", i, kv[i].key);
+                                strcat(resp, kv[i].value);
+                                strcat(resp, "\n");
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         return 1;
     }
 
