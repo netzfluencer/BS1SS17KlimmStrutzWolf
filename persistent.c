@@ -36,8 +36,6 @@ void schreiben() {
         if(strlen(kv[i].key) > 0){
             fprintf(dataFile, "%s\n%s\n", kv[i].key, kv[i].value);
         }
-        else{
-        }
     }
     fclose(dataFile);
     exit(1);
